@@ -1,0 +1,16 @@
+version: '3.8'
+
+volumes:
+  pg_db_volume:
+    driver: local
+
+services:
+
+  config-server:
+    image: config-server-m1
+    platform: linux/arm64
+    ports:
+      - "8888:8888"
+    environment:
+      - "CONFIG_REPO=https://github.com/AgenaTech/iamai-configs.git"
+

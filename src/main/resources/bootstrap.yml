@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: keycloak-admin-adapter
+  cloud:
+    config:
+      discovery:
+        enabled: false
+      uri: http://localhost:8888
+
+
+
+
+
+
+
+

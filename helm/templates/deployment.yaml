@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.environment }}
+  name: {{ include "helm-chart.fullname" . }}
+spec:
+  replicas: {{ .Values.configuration.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "helm-chart.fullname" . }}
+  template:
+    metadata:
+      annotations:
+        rollme: {{ randAlphaNum 5 | quote }}
+      labels:
+        app: {{ include "helm-chart.fullname" . }}
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: app
+          image: {{ .Values.application.image }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.application.profile }}
+          ports:
+            - containerPort: {{ .Values.application.port }}
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: {{ .Values.application.port }}
+            initialDelaySeconds: 20
+            periodSeconds: 3
