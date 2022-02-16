@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 public class KeycloakConfig {
         private String url;
         private String adminSecret;
-        private String usersUri;
 }
 
 
