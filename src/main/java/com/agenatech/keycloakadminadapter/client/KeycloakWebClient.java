@@ -46,7 +46,6 @@ public class KeycloakWebClient {
                 .body(BodyInserters.fromValue(signupRequest))
                 .retrieve()
                 .bodyToMono(AuthResponse.class);
-//        todo change return type to void
     }
 
 
