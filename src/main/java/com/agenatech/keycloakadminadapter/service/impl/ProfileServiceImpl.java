@@ -26,13 +26,13 @@ public class ProfileServiceImpl implements ProfileService {
         this.profilesClient = profilesClient;
     }
 
-    public UserProfile signUp(UUID parentId, SignupRequest signupRequest) {
+    public ResponseEntity signUp(UUID parentId, SignupRequest signupRequest) {
         UUID keycloackUserId = UUID.fromString(registerUser(signupRequest));
         return createProfile(parentId, keycloackUserId, signupRequestToUserProfile(signupRequest));
     }
 
     @Override
-    public UserProfile createProfile(UUID parentId, UUID profileId, UserProfile userProfile) {
+    public ResponseEntity<Object> createProfile(UUID parentId, UUID profileId, UserProfile userProfile) {
         userProfile.setParentId(parentId);
         return profilesClient.createProfile(profileId, userProfile);
     }

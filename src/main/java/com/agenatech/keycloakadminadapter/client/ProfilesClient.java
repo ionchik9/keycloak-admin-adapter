@@ -19,7 +19,7 @@ import java.util.UUID;
 public interface ProfilesClient {
 
     @PutMapping(value = "${profiles.path}/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    UserProfile createProfile(@PathVariable("id") UUID id, UserProfile userProfile);
+    ResponseEntity<Object> createProfile(@PathVariable("id") UUID id, UserProfile userProfile);
 
     @PutMapping(value = "${auth-server.email-actions-uri}", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity emailAction(@PathVariable("id") String id, List<KeycloakRequiredAction> actions, @RequestHeader("Authorization") String adminToken);

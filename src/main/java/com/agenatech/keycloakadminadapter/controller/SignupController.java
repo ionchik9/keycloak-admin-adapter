@@ -31,7 +31,7 @@ public class SignupController {
     }
 
     @PutMapping("{parentId}/create-profile/{profileId}")
-    public ResponseEntity<UserProfile> registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
-        return  ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(parentId, profileId, userProfile));
+    public ResponseEntity registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(parentId, profileId, userProfile).getBody());
     }
 }
