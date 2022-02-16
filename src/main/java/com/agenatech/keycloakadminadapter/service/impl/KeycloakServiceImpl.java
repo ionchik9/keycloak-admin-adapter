@@ -21,16 +21,18 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class KeycloakServiceImpl implements KeycloakService {
-    @Autowired
-    private KeycloakClient keycloackClient;
-    @Autowired
-    private KeycloakConfig keycloackConfig;
+    private final KeycloakClient keycloackClient;
+    private final KeycloakConfig keycloackConfig;
 
-
+    @Autowired
+    public KeycloakServiceImpl(KeycloakClient keycloackClient, KeycloakConfig keycloackConfig) {
+        this.keycloackClient = keycloackClient;
+        this.keycloackConfig = keycloackConfig;
+    }
 
     @Override
     public ResponseEntity signup(SignupRequest request) {
-        String adminToken = adminLogin().getBody().getAccess_token();
+        String adminToken = adminLogin().getAccess_token();
         KeycloakCredentials credentials =
                 KeycloakCredentials.builder()
                         .value(request.getPassword())
@@ -41,19 +43,24 @@ public class KeycloakServiceImpl implements KeycloakService {
         KeycloakSignupRequest signupRequest =
                 KeycloakSignupRequest
                         .builder()
-                        .email(request.getEmail())
-                        .credentials(Arrays.asList(credentials))
+                        .username(request.getEmail())
+                        .credentials(List.of(credentials))
                         .enabled(Optional.ofNullable(request.getEnabled()).orElse(true))
                         .build();
         return keycloackClient.registerUser(signupRequest, "Bearer " + adminToken);
     }
 
-    @Override
-    public ResponseEntity emailRequiredAction(String userId, List<KeycloakRequiredAction> requiredActions) {
-        return keycloackClient.emailAction(userId, requiredActions, "Bearer " + adminLogin().getBody().getAccess_token());
+    public ResponseEntity signup(KeycloakSignupRequest request) {
+        String adminToken = adminLogin().getAccess_token();
+        return keycloackClient.registerUser(request, "Bearer " + adminToken);
     }
 
-    private ResponseEntity<AuthResponse> adminLogin() {
+    @Override
+    public ResponseEntity emailRequiredAction(String userId, List<KeycloakRequiredAction> requiredActions) {
+        return keycloackClient.emailAction(userId, requiredActions, "Bearer " + adminLogin().getAccess_token());
+    }
+
+    private AuthResponse adminLogin() {
         KeycloakAdminTokenRequest adminTokenRequest =
                 KeycloakAdminTokenRequest
                         .builder()

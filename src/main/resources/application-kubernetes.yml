@@ -1,0 +1,4 @@
+profiles:
+  url: http://profiles
+  path: api/v1/profiles
+

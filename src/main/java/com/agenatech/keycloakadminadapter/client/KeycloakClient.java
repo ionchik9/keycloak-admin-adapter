@@ -17,13 +17,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
-@FeignClient("${auth-server.url}")
+@FeignClient(name = "keycloak", url = "${auth-server.url}")
 @Service
 public interface KeycloakClient {
 
     @PostMapping(value = "${auth-server.cli-token-uri}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @Headers("Content-Type: application/x-www-form-urlencoded")
-    ResponseEntity<AuthResponse> getCliToken(KeycloakAdminTokenRequest cliRequest);
+    AuthResponse getCliToken(KeycloakAdminTokenRequest cliRequest);
 
     @PostMapping(value = "${auth-server.users-uri}", consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity registerUser(KeycloakSignupRequest signupRequest, @RequestHeader("Authorization") String adminToken);

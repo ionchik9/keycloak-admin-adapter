@@ -11,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class KeycloakSignupRequest {
-    private String email;
+    private String username;
     private boolean enabled;
     private List<KeycloakCredentials> credentials;
 }
