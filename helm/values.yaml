@@ -1,0 +1,10 @@
+environment: diar
+
+application:
+  port: 8080
+  image: 406327436908.dkr.ecr.eu-north-1.amazonaws.com/agenatech/keycloak-admin-adapter:latest
+  profile: "kubernetes"
+
+configuration:
+  replicas: 1
+  type: ClusterIP
