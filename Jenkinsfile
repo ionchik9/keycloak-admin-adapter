@@ -39,11 +39,11 @@ pipeline {
             }
         }
 
-//         stage('Run tests') {
-//             steps {
-//                  sh 'mvn test'
-//             }
-//         }
+        stage('Run tests') {
+            steps {
+                 sh 'mvn test'
+            }
+        }
 
         stage('Build Image') {
             steps {

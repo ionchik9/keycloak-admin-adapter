@@ -2,7 +2,6 @@ package com.agenatech.keycloakadminadapter.service.impl;
 
 import com.agenatech.keycloakadminadapter.client.KeycloakClient;
 import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
-import com.agenatech.keycloakadminadapter.model.KeycloakRequiredAction;
 import com.agenatech.keycloakadminadapter.model.payload.KeycloakCredentials;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakAdminTokenRequest;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,10 +53,6 @@ public class KeycloakServiceImpl implements KeycloakService {
         return keycloackClient.registerUser(request, "Bearer " + adminToken);
     }
 
-    @Override
-    public ResponseEntity emailRequiredAction(String userId, List<KeycloakRequiredAction> requiredActions) {
-        return keycloackClient.emailAction(userId, requiredActions, "Bearer " + adminLogin().getAccess_token());
-    }
 
     private AuthResponse adminLogin() {
         KeycloakAdminTokenRequest adminTokenRequest =

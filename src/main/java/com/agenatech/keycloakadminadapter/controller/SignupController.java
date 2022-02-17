@@ -1,6 +1,7 @@
 package com.agenatech.keycloakadminadapter.controller;
 
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
+import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import com.agenatech.keycloakadminadapter.service.ProfileService;
@@ -33,5 +34,10 @@ public class SignupController {
     @PutMapping("{parentId}/create-profile/{profileId}")
     public ResponseEntity registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
         return ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(parentId, profileId, userProfile).getBody());
+    }
+
+    @PostMapping("{parentId}/create-account-profile")
+    public ResponseEntity createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
+        return  profileService.signUp(parentId, signupRequest);
     }
 }

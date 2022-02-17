@@ -8,6 +8,5 @@ import java.util.UUID;
 
 public interface ProfileService {
     ResponseEntity signUp(UUID parentId, SignupRequest signupRequest);
-
     ResponseEntity<Object> createProfile(UUID parentId, UUID profileId, UserProfile userProfile);
 }

@@ -1,0 +1,3 @@
+spring:
+logging.level:
+    com.agenatech: DEBUG
