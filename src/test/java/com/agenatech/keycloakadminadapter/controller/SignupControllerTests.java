@@ -3,6 +3,7 @@ package com.agenatech.keycloakadminadapter.controller;
 
 import com.agenatech.keycloakadminadapter.client.KeycloakClient;
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
+import com.agenatech.keycloakadminadapter.model.payload.KeycloakCredentials;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
@@ -24,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -84,7 +86,7 @@ class SignupControllerTests {
 
 			this.mockMvc.perform(post(CONTROLLER_URL_ROOT_PREFIX + UUID.randomUUID() + "/create-account-profile")
 							.contentType(MediaType.APPLICATION_JSON)
-							.content(serialize(SignupRequest.builder().email("ddd").password("sss").build())))
+							.content(serialize(SignupRequest.builder().email("ddd").credentials(List.of(KeycloakCredentials.builder().build())).build())))
 					.andExpect(status().isCreated());
 		}
 	}
