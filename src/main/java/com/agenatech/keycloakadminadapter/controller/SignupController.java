@@ -32,12 +32,12 @@ public class SignupController {
     }
 
     @PutMapping("{parentId}/create-profile/{profileId}")
-    public ResponseEntity registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(parentId, profileId, userProfile).getBody());
+    public ResponseEntity<UserProfile> registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(parentId, profileId, userProfile));
     }
 
     @PostMapping("{parentId}/create-account-profile")
-    public ResponseEntity createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
-        return  profileService.signUp(parentId, signupRequest);
+    public ResponseEntity<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
+        return  ResponseEntity.status(HttpStatus.CREATED).body(profileService.signUp(parentId, signupRequest));
     }
 }

@@ -64,7 +64,7 @@ class SignupControllerTests {
 
 	@Test
 	public void createProfile() throws Exception{
-		Mockito.when(profilesClient.createProfile(any(), any())).thenReturn(ResponseEntity.status(HttpStatus.CREATED).build());
+		Mockito.when(profilesClient.createProfile(any(), any())).thenReturn(UserProfile.builder().build());
 
 		this.mockMvc.perform(put(CONTROLLER_URL_ROOT_PREFIX + UUID.randomUUID() + "/create-profile/" + UUID.randomUUID())
 						.contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +77,7 @@ class SignupControllerTests {
 	public void createAccountAndProfile() throws Exception{
 		Mockito.when(keycloakClient.registerUser(any(), any())).thenReturn(ResponseEntity.status(HttpStatus.CREATED).build());
 		Mockito.when(keycloakClient.getCliToken(any())).thenReturn(new AuthResponse());
-		Mockito.when(profilesClient.createProfile(any(), any())).thenReturn(ResponseEntity.status(HttpStatus.CREATED).build());
+		Mockito.when(profilesClient.createProfile(any(), any())).thenReturn(UserProfile.builder().build());
 
 		try (MockedStatic<UriUtils> mockedLocation = Mockito.mockStatic(UriUtils.class)) {
 			mockedLocation
