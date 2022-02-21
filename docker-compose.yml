@@ -12,5 +12,5 @@ services:
     ports:
       - "8888:8888"
     environment:
-      - "CONFIG_REPO=https://github.com/AgenaTech/iamai-configs.git"
+      - "CONFIG_REPO=https://github.com/AgenaTech/diar-configs.git"
 

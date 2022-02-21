@@ -1,6 +1,7 @@
 package com.agenatech.keycloakadminadapter.service.impl;
 
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
+import com.agenatech.keycloakadminadapter.exception.ProfilesException;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
@@ -28,7 +29,13 @@ public class ProfileServiceImpl implements ProfileService {
 
     public UserProfile signUp(UUID parentId, SignupRequest signupRequest) {
         UUID keycloackUserId = UUID.fromString(registerUser(signupRequest));
-        return createProfile(parentId, keycloackUserId, signupRequestToUserProfile(signupRequest));
+        try {
+            return createProfile(parentId, keycloackUserId, signupRequestToUserProfile(signupRequest));
+        } catch (Exception e){
+            log.error("isssssuuuu");
+            throw new ProfilesException("Error during profile creation, try the create profile operation, profileId = " + keycloackUserId, e.getCause());
+        }
+
     }
 
     @Override

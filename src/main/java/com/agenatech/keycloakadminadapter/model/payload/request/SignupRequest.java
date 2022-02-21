@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
@@ -22,5 +23,6 @@ public class SignupRequest {
     private String additionalDetails;
 
     private Boolean enabled;
+    @NotNull
     private List<KeycloakCredentials> credentials;
 }
