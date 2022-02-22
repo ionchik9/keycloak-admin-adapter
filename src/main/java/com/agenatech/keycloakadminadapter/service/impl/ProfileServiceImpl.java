@@ -26,6 +26,7 @@ public class ProfileServiceImpl implements ProfileService {
         this.profilesClient = profilesClient;
     }
 
+    @Override
     public  Mono<UserProfile> signUp(UUID parentId, SignupRequest signupRequest) {
         return registerUser(signupRequest)
                 .flatMap(userId -> createProfile(parentId, userId, signupRequestToUserProfile(signupRequest)));
@@ -39,7 +40,8 @@ public class ProfileServiceImpl implements ProfileService {
 
 
     private Mono<String> registerUser(SignupRequest request) {
-        return  UriUtils.getLocationId(keycloakService.signup(request));
+        return keycloakService.signup(request)
+                .map(UriUtils::getLocationId);
     }
 
 

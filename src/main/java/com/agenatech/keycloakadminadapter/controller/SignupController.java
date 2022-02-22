@@ -6,6 +6,7 @@ import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.Keycloa
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import com.agenatech.keycloakadminadapter.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -27,16 +28,19 @@ public class SignupController {
 
 
     @PostMapping("/create-account")
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<URI> createAccount(@Valid @RequestBody KeycloakSignupRequest keycloakSignupRequest) {
         return  keycloakService.signup(keycloakSignupRequest);
     }
 
     @PutMapping("{parentId}/create-profile/{profileId}")
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserProfile> registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
         return profileService.createProfile(parentId, profileId.toString(), userProfile);
     }
 
     @PostMapping("{parentId}/create-account-profile")
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
         return  profileService.signUp(parentId, signupRequest);
     }

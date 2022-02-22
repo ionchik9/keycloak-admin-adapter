@@ -28,14 +28,6 @@ import java.util.Map;
 
 @Service
 public class KeycloakClient {
-
-//    @PostMapping(value = "${auth-server.cli-token-uri}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-//    @Headers("Content-Type: application/x-www-form-urlencoded")
-//    AuthResponse getCliToken(KeycloakAdminTokenRequest cliRequest);
-//
-//    @PostMapping(value = "${auth-server.users-uri}", consumes = MediaType.APPLICATION_JSON_VALUE)
-//    ResponseEntity registerUser(KeycloakSignupRequest signupRequest, @RequestHeader("Authorization") String adminToken);
-
     private WebClient webClient;
 
     private final KeycloakConfig clientConfig;
@@ -80,7 +72,7 @@ public class KeycloakClient {
     }
 
     MultiValueMap<String, String> convertToForm(Object obj) {
-        MultiValueMap parameters = new LinkedMultiValueMap<String, String>();
+        var parameters = new LinkedMultiValueMap<String, String>();
         Map<String, String> maps = objectMapper.convertValue(obj, new TypeReference<>() {});
         parameters.setAll(maps);
         return parameters;

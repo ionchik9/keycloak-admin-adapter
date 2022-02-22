@@ -50,6 +50,7 @@ public class ProfilesClient {
                 .body(BodyInserters.fromValue(userProfile))
                 .retrieve()
                 .bodyToMono(UserProfile.class);
+//                .onErrorReturn()
     }
 }
 
