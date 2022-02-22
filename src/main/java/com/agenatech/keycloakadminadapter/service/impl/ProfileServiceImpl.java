@@ -6,7 +6,9 @@ import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import com.agenatech.keycloakadminadapter.service.ProfileService;
 import com.agenatech.keycloakadminadapter.utils.UriUtils;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -45,15 +47,11 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
 
-    private UserProfile signupRequestToUserProfile(SignupRequest signupRequest){
-        return UserProfile.builder()
-                .email(signupRequest.getEmail())
-                .firstName(signupRequest.getFirstName())
-                .lastName(signupRequest.getLastName())
-                .additionalDetails(signupRequest.getAdditionalDetails())
-                .avatarUrl(signupRequest.getAvatarUrl())
-                .mobileNumber(signupRequest.getMobileNumber())
-                .build();
+    @SneakyThrows
+    private UserProfile signupRequestToUserProfile(SignupRequest signupRequest) {
+        var profile = new UserProfile();
+        BeanUtils.copyProperties(profile, signupRequest);
+        return profile;
     }
 
 }
