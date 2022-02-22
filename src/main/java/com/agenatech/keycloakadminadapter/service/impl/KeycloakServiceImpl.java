@@ -9,9 +9,10 @@ import com.agenatech.keycloakadminadapter.model.payload.response.AuthResponse;
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
+import java.net.URI;
 import java.util.Optional;
 
 @Service
@@ -27,8 +28,7 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public ResponseEntity signup(SignupRequest request) {
-        String adminToken = adminLogin().getAccess_token();
+    public Mono<URI> signup(SignupRequest request) {
         KeycloakSignupRequest signupRequest =
                 KeycloakSignupRequest
                         .builder()
@@ -36,16 +36,18 @@ public class KeycloakServiceImpl implements KeycloakService {
                         .credentials(request.getCredentials())
                         .enabled(Optional.ofNullable(request.getEnabled()).orElse(true))
                         .build();
-        return keycloackClient.registerUser(signupRequest, "Bearer " + adminToken);
+        return adminLogin()
+                .flatMap(authResponse -> keycloackClient.createAccount(signupRequest, "Bearer " + authResponse.getAccess_token()));
     }
 
-    public ResponseEntity signup(KeycloakSignupRequest request) {
-        String adminToken = adminLogin().getAccess_token();
-        return keycloackClient.registerUser(request, "Bearer " + adminToken);
+    @Override
+    public Mono<URI> signup(KeycloakSignupRequest request) {
+        return adminLogin()
+                .flatMap(authResponse -> keycloackClient.createAccount(request, "Bearer " + authResponse.getAccess_token()));
     }
 
 
-    private AuthResponse adminLogin() {
+    private Mono<AuthResponse> adminLogin() {
         KeycloakAdminTokenRequest adminTokenRequest =
                 KeycloakAdminTokenRequest
                         .builder()

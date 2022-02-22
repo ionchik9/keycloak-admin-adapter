@@ -7,15 +7,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "auth-server")
+@ConfigurationProperties(prefix = "profiles")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class KeycloakConfig {
-        private String url;
-        private String adminSecret;
-        private String cliTokenUri;
-        private String usersUri;
+public class ProfilesConfig {
+    private String path;
+    private String url;
 }
-
-
