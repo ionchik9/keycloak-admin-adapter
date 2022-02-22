@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "keycloak", url = "${auth-server.url}")
 @Service
 public interface KeycloakClient {
-
     @PostMapping(value = "${auth-server.cli-token-uri}", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @Headers("Content-Type: application/x-www-form-urlencoded")
     AuthResponse getCliToken(KeycloakAdminTokenRequest cliRequest);
