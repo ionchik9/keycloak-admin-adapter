@@ -1,16 +1,16 @@
 package com.agenatech.keycloakadminadapter.model.payload.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuthResponse {
-    private String access_token;
-    private String refresh_token;
-    private String token_type;
-    private long expires_in;
-    private long refresh_expires_in;
+public record AuthResponse (
+        @JsonProperty("access_token")
+        String accessToken,
+        @JsonProperty("refresh_token")
+        String refreshToken,
+        @JsonProperty("token_type")
+        String tokenType,
+        @JsonProperty("expires_in")
+        long expiresIn,
+        @JsonProperty("refresh_expires_in")
+        long refreshExpiresIn){
 }

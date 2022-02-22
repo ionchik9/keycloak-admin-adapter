@@ -19,6 +19,11 @@ public class WebClientExceptionAdvice {
     public ResponseEntity<String> exceptionHandler(ConnectException ex) {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ex.getMessage());
     }
+
+    @ExceptionHandler(ProfilesException.class)
+    public ResponseEntity<String> exceptionHandler(ProfilesException ex) {
+        return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
+    }
 }
 
 

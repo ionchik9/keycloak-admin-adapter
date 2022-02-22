@@ -37,13 +37,13 @@ public class KeycloakServiceImpl implements KeycloakService {
                         .enabled(Optional.ofNullable(request.getEnabled()).orElse(true))
                         .build();
         return adminLogin()
-                .flatMap(authResponse -> keycloackClient.createAccount(signupRequest, "Bearer " + authResponse.getAccess_token()));
+                .flatMap(authResponse -> keycloackClient.createAccount(signupRequest, "Bearer " + authResponse.accessToken()));
     }
 
     @Override
     public Mono<URI> signup(KeycloakSignupRequest request) {
         return adminLogin()
-                .flatMap(authResponse -> keycloackClient.createAccount(request, "Bearer " + authResponse.getAccess_token()));
+                .flatMap(authResponse -> keycloackClient.createAccount(request, "Bearer " + authResponse.accessToken()));
     }
 
 
@@ -51,9 +51,9 @@ public class KeycloakServiceImpl implements KeycloakService {
         KeycloakAdminTokenRequest adminTokenRequest =
                 KeycloakAdminTokenRequest
                         .builder()
-                        .client_id("admin-cli")
-                        .client_secret(keycloackConfig.getAdminSecret())
-                        .grant_type("client_credentials")
+                        .clientId("admin-cli")
+                        .clientSecret(keycloackConfig.getAdminSecret())
+                        .grantType("client_credentials")
                         .build();
         return keycloackClient.getCliToken(adminTokenRequest);
     }
