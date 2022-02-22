@@ -1,3 +1,14 @@
 spring:
 logging.level:
     com.agenatech: DEBUG
+auth-server:
+    url: ${keycloak-client.server-url}
+    admin-secret: 123
+    cli-token-uri: auth/realms/master/protocol/openid-connect/token
+    users-uri: auth/admin/realms/${keycloak-client.realm}/users
+keycloak-client:
+    server-url: https://sso.test
+    realm: test
+profiles:
+    url: http://localhost:8989
+    path: api/v1/profiles

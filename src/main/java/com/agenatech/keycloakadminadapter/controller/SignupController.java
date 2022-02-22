@@ -7,10 +7,11 @@ import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import com.agenatech.keycloakadminadapter.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -27,17 +28,20 @@ public class SignupController {
 
 
     @PostMapping("/create-account")
-    public ResponseEntity createAccount(@Valid @RequestBody KeycloakSignupRequest keycloakSignupRequest) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<URI> createAccount(@Valid @RequestBody KeycloakSignupRequest keycloakSignupRequest) {
         return  keycloakService.signup(keycloakSignupRequest);
     }
 
     @PutMapping("{parentId}/create-profile/{profileId}")
-    public ResponseEntity<UserProfile> registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(profileService.createProfile(parentId, profileId, userProfile));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<UserProfile> registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
+        return profileService.createProfile(parentId, profileId.toString(), userProfile);
     }
 
     @PostMapping("{parentId}/create-account-profile")
-    public ResponseEntity<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
-        return  ResponseEntity.status(HttpStatus.CREATED).body(profileService.signUp(parentId, signupRequest));
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
+        return  profileService.signUp(parentId, signupRequest);
     }
 }

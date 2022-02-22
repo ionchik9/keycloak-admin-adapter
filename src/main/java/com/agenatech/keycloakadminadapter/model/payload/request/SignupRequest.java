@@ -21,6 +21,7 @@ public class SignupRequest {
     private String lastName;
     private String mobileNumber;
     private String additionalDetails;
+    private String avatarUrl;
 
     private Boolean enabled;
     @NotNull

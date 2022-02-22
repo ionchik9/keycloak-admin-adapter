@@ -1,5 +1,6 @@
 package com.agenatech.keycloakadminadapter.model.payload.request.keycloak;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Data
@@ -8,7 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class KeycloakAdminTokenRequest {
-    private String client_id;
-    private String grant_type;
-    private String client_secret;
+    @JsonProperty("client_id")
+    private String clientId;
+
+    @JsonProperty("grant_type")
+    private String grantType;
+
+    @JsonProperty("client_secret")
+    private String clientSecret;
 }

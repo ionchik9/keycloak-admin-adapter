@@ -2,9 +2,11 @@ package com.agenatech.keycloakadminadapter.service;
 
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
-import org.springframework.http.ResponseEntity;
+import reactor.core.publisher.Mono;
+
+import java.net.URI;
 
 public interface KeycloakService {
-    ResponseEntity signup(SignupRequest request);
-    ResponseEntity signup(KeycloakSignupRequest request);
+    Mono<URI> signup(SignupRequest request);
+    Mono<URI> signup(KeycloakSignupRequest request);
 }

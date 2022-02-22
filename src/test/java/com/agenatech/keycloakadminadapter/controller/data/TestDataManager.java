@@ -3,15 +3,15 @@ package com.agenatech.keycloakadminadapter.controller.data;
 import com.agenatech.keycloakadminadapter.model.payload.KeycloakCredentials;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
-import org.springframework.stereotype.Service;
+import com.agenatech.keycloakadminadapter.model.payload.response.AuthResponse;
 
 import java.util.List;
 import java.util.UUID;
 
-@Service
+
 public class TestDataManager {
 
-    public UserProfile generateUserProfile(UUID id){
+    public static UserProfile generateUserProfile(UUID id){
         return UserProfile.builder()
                 .firstName("testttt" + id)
                 .email(id +"@email.com")
@@ -19,7 +19,7 @@ public class TestDataManager {
     }
 
 
-    public KeycloakSignupRequest generateKeycloakSignupRequest(){
+    public static KeycloakSignupRequest generateKeycloakSignupRequest(){
         return KeycloakSignupRequest.builder()
                 .username("test")
                 .enabled(true)
@@ -29,5 +29,9 @@ public class TestDataManager {
                         .type("password")
                         .build()))
                 .build();
+    }
+
+    public static AuthResponse generateAuthResponse(){
+        return new AuthResponse("","","",300, 1800);
     }
 }
