@@ -33,7 +33,7 @@ public class SignupController {
 
     @PutMapping("{parentId}/create-profile/{profileId}")
     public Mono<UserProfile> registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
-        return profileService.createProfile(parentId, Mono.justOrEmpty(profileId.toString()), userProfile);
+        return profileService.createProfile(parentId, profileId.toString(), userProfile);
     }
 
     @PostMapping("{parentId}/create-account-profile")

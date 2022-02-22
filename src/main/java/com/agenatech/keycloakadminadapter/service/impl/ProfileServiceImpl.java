@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
 import java.util.UUID;
 
 @Service
@@ -28,26 +27,19 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     public  Mono<UserProfile> signUp(UUID parentId, SignupRequest signupRequest) {
-        Mono<String> keycloackUserId = registerUser(signupRequest);
-//        try {
-        return createProfile(parentId, keycloackUserId, signupRequestToUserProfile(signupRequest));
-//        } catch (Exception e){
-//            log.error("isssssuuuu");
-//            throw new ProfilesException("Error during profile creation, try the create profile operation, profileId = " + keycloackUserId, e.getCause());
-//        }
-
+        return registerUser(signupRequest)
+                .flatMap(userId -> createProfile(parentId, userId, signupRequestToUserProfile(signupRequest)));
     }
 
     @Override
-    public Mono<UserProfile> createProfile(UUID parentId, Mono<String> profileId, UserProfile userProfile) {
+    public Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile) {
         userProfile.setParentId(parentId);
         return profilesClient.createProfile(profileId, userProfile);
     }
 
 
     private Mono<String> registerUser(SignupRequest request) {
-        Mono<URI>  response = keycloakService.signup(request);
-        return  UriUtils.getLocationId(response);
+        return  UriUtils.getLocationId(keycloakService.signup(request));
     }
 
 
@@ -56,6 +48,9 @@ public class ProfileServiceImpl implements ProfileService {
                 .email(signupRequest.getEmail())
                 .firstName(signupRequest.getFirstName())
                 .lastName(signupRequest.getLastName())
+                .additionalDetails(signupRequest.getAdditionalDetails())
+                .avatarUrl(signupRequest.getAvatarUrl())
+                .mobileNumber(signupRequest.getMobileNumber())
                 .build();
     }
 

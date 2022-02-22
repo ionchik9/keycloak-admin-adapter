@@ -43,7 +43,7 @@ public class ProfilesClient {
                 .build();
     }
 
-    public Mono<UserProfile> createProfile(Mono<String> id, UserProfile userProfile) {
+    public Mono<UserProfile> createProfile(String id, UserProfile userProfile) {
         return webClient
                 .put()
                 .uri(profilesConfig.getPath()+"/{id}", id)

@@ -9,6 +9,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 public class WebClientExceptionAdvice {
     @ExceptionHandler(WebClientResponseException.class)
     public ResponseEntity<String> exceptionHandler(WebClientResponseException ex) {
-        return ResponseEntity.status(ex.getStatusCode()).body(ex.getMessage());
+        return ResponseEntity.status(ex.getStatusCode()).body(ex.getResponseBodyAsString());
     }
 }
