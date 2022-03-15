@@ -1,5 +1,6 @@
 package com.agenatech.keycloakadminadapter.service.impl;
 
+import com.agenatech.keycloakadminadapter.client.AchievementsClient;
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
 import com.agenatech.keycloakadminadapter.exception.ProfilesException;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
@@ -19,13 +20,15 @@ import java.util.UUID;
 public class ProfileServiceImpl implements ProfileService {
     private final KeycloakService keycloakService;
     private final ProfilesClient profilesClient;
-
+    private final AchievementsClient achievementsClient;
 
     @Autowired
-    public ProfileServiceImpl(KeycloakService keycloakService, ProfilesClient profilesClient) {
+    public ProfileServiceImpl(KeycloakService keycloakService, ProfilesClient profilesClient, AchievementsClient achievementsClient) {
         this.keycloakService = keycloakService;
         this.profilesClient = profilesClient;
+        this.achievementsClient = achievementsClient;
     }
+
 
     public UserProfile signUp(UUID parentId, SignupRequest signupRequest) {
         UUID keycloackUserId = UUID.fromString(registerUser(signupRequest));
@@ -40,6 +43,8 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public UserProfile createProfile(UUID parentId, UUID profileId, UserProfile userProfile) {
+//        todo replace with kafka events
+        achievementsClient.scheduleAchievements(profileId);
         userProfile.setParentId(parentId);
         return profilesClient.createProfile(profileId, userProfile);
     }

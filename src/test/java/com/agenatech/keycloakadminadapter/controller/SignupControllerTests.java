@@ -1,6 +1,7 @@
 package com.agenatech.keycloakadminadapter.controller;
 
 
+import com.agenatech.keycloakadminadapter.client.AchievementsClient;
 import com.agenatech.keycloakadminadapter.client.KeycloakClient;
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
 import com.agenatech.keycloakadminadapter.controller.data.TestDataManager;
@@ -49,6 +50,8 @@ class SignupControllerTests {
 	private ProfilesClient profilesClient;
 	@MockBean
 	private KeycloakClient keycloakClient;
+	@MockBean
+	private AchievementsClient achievementsClient;
 
 	protected static final String CONTROLLER_URL_ROOT_PREFIX = "/api/v1/sso/";
 
@@ -69,6 +72,8 @@ class SignupControllerTests {
 	@Test
 	public void createProfile() throws Exception{
 		Mockito.when(profilesClient.createProfile(any(), any())).thenReturn(UserProfile.builder().build());
+		Mockito.when(keycloakClient.getCliToken(any())).thenReturn(new AuthResponse());
+		Mockito.when(achievementsClient.scheduleAchievements(any())).thenReturn(ResponseEntity.status(HttpStatus.OK).build());
 
 		this.mockMvc.perform(put(CONTROLLER_URL_ROOT_PREFIX + UUID.randomUUID() + "/create-profile/" + UUID.randomUUID())
 						.contentType(MediaType.APPLICATION_JSON)
