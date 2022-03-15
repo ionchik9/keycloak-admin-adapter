@@ -30,5 +30,5 @@ spec:
             httpGet:
               path: /actuator/health
               port: {{ .Values.application.port }}
-            initialDelaySeconds: 20
-            periodSeconds: 3
+            initialDelaySeconds: 90
+            periodSeconds: 10
