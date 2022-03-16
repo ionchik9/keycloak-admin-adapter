@@ -2,14 +2,13 @@ package com.agenatech.keycloakadminadapter.client;
 
 
 import com.agenatech.keycloakadminadapter.config.AchievementsConfig;
+import com.agenatech.keycloakadminadapter.exception.AchievementsException;
 import com.agenatech.keycloakadminadapter.exception.ErrorDto;
-import com.agenatech.keycloakadminadapter.exception.ProfilesException;
 import io.netty.handler.logging.LogLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -50,7 +49,7 @@ public class AchievementsClient {
                 .uri(achievementsConfig.getSchedulePath()+"/{userId}/schedule-achievements", userId)
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
-                        .flatMap(error -> Mono.error(new ProfilesException(error.message(), userId, response.statusCode()))))
+                        .flatMap(error -> Mono.error(new AchievementsException(error.message(), userId, response.statusCode()))))
                 .bodyToMono(Void.class);
     }
 }

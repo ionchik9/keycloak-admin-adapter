@@ -42,7 +42,8 @@ public class ProfileServiceImpl implements ProfileService {
 //    todo remove achievement after kafka is implemented
     public Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile) {
         userProfile.setParentId(parentId);
-        return achievementsClient.scheduleUserAchievements(profileId).then(profilesClient.createProfile(profileId, userProfile));
+        return achievementsClient.scheduleUserAchievements(profileId)
+                .then(profilesClient.createProfile(profileId, userProfile));
     }
 
 
