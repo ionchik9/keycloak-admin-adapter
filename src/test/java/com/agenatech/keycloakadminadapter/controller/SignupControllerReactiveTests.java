@@ -1,7 +1,6 @@
 package com.agenatech.keycloakadminadapter.controller;
 
 
-import com.agenatech.keycloakadminadapter.client.AchievementsClient;
 import com.agenatech.keycloakadminadapter.client.KeycloakClient;
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
 import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
@@ -48,8 +47,6 @@ public class SignupControllerReactiveTests {
 	private ProfilesClient profilesClient;
 	@MockBean
 	private KeycloakClient keycloakClient;
-	@MockBean
-	private AchievementsClient achievementsClient;
 
 	@Autowired
 	private WebTestClient webTestClient;
@@ -73,7 +70,6 @@ public class SignupControllerReactiveTests {
 	@Test
 	public void createProfile() {
 		Mockito.when(profilesClient.createProfile(any(), any())).thenReturn(Mono.just(UserProfile.builder().build()));
-		Mockito.when(achievementsClient.scheduleUserAchievements(any())).thenReturn(Mono.just("").then());
 		UUID profileId = UUID.randomUUID();
 
 		webTestClient.put()
@@ -89,8 +85,6 @@ public class SignupControllerReactiveTests {
 		Mockito.when(keycloakClient.createAccount(any(), any())).thenReturn(Mono.just(new URI("dr")));
 		Mockito.when(keycloakClient.getCliToken(any())).thenReturn(Mono.just(TestDataManager.generateAuthResponse()));
 		Mockito.when(profilesClient.createProfile(any(), any())).thenReturn(Mono.just(UserProfile.builder().build()));
-		Mockito.when(achievementsClient.scheduleUserAchievements(any())).thenReturn(Mono.just("").then());
-
 
 		try (MockedStatic<UriUtils> mockedLocation = Mockito.mockStatic(UriUtils.class)) {
 			mockedLocation

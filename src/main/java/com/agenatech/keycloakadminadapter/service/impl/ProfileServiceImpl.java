@@ -1,6 +1,5 @@
 package com.agenatech.keycloakadminadapter.service.impl;
 
-import com.agenatech.keycloakadminadapter.client.AchievementsClient;
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
@@ -21,15 +20,13 @@ import java.util.UUID;
 public class ProfileServiceImpl implements ProfileService {
     private final KeycloakService keycloakService;
     private final ProfilesClient profilesClient;
-    private final AchievementsClient achievementsClient;
-
 
     @Autowired
-    public ProfileServiceImpl(KeycloakService keycloakService, ProfilesClient profilesClient, AchievementsClient achievementsClient) {
+    public ProfileServiceImpl(KeycloakService keycloakService, ProfilesClient profilesClient) {
         this.keycloakService = keycloakService;
         this.profilesClient = profilesClient;
-        this.achievementsClient = achievementsClient;
     }
+
 
 
     @Override
@@ -39,11 +36,9 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-//    todo remove achievement after kafka is implemented
     public Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile) {
         userProfile.setParentId(parentId);
-        return achievementsClient.scheduleUserAchievements(profileId)
-                .then(profilesClient.createProfile(profileId, userProfile));
+        return profilesClient.createProfile(profileId, userProfile);
     }
 
 
