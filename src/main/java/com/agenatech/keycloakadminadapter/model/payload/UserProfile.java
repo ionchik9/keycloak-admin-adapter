@@ -13,6 +13,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor @AllArgsConstructor
 public class UserProfile {
+    private UUID id;
+
     @NotBlank
     private String email;
 
