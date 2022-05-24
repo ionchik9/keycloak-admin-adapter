@@ -19,6 +19,7 @@ import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.logging.AdvancedByteBufFormat;
 
 import javax.annotation.PostConstruct;
+import java.util.UUID;
 
 
 @Service
@@ -56,6 +57,16 @@ public class ProfilesClient {
                 .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
                         .flatMap(error -> Mono.error(new ProfilesException(error.message(), id, response.statusCode()))))
                 .bodyToMono(UserProfile.class);
+    }
+
+    public Mono<Void> deleteProfile(UUID profileId){
+        return webClient
+                .delete()
+                .uri(profilesConfig.getPath()+"/{profileId}", profileId)
+                .retrieve()
+                .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
+                        .flatMap(error -> Mono.error(new ProfilesException(error.message(), profileId.toString(), response.statusCode()))))
+                .bodyToMono(Void.class);
     }
 }
 

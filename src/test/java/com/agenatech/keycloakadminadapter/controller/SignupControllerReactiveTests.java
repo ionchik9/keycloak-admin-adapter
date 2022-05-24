@@ -38,7 +38,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 
 @RunWith(SpringRunner.class)
-@WebFluxTest(controllers = SignupController.class)
+@WebFluxTest(controllers = Controller.class)
 @Import({ProfileServiceImpl.class, KeycloakServiceImpl.class, KeycloakConfig.class})
 @AutoConfigureWebTestClient
 @ActiveProfiles("test")

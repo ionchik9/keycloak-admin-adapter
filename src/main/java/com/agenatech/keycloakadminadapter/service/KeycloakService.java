@@ -5,8 +5,10 @@ import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.Keycloa
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
+import java.util.UUID;
 
 public interface KeycloakService {
     Mono<URI> signup(SignupRequest request);
     Mono<URI> signup(KeycloakSignupRequest request);
+    Mono<Void> deleteAccount(UUID accountId);
 }

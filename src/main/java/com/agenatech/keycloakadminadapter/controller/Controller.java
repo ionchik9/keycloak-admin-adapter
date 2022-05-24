@@ -16,18 +16,18 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1/sso")
-public class SignupController {
+public class Controller {
     private final ProfileService profileService;
     private final KeycloakService keycloakService;
 
     @Autowired
-    public SignupController(ProfileService profileService, KeycloakService keycloakService) {
+    public Controller(ProfileService profileService, KeycloakService keycloakService) {
         this.profileService = profileService;
         this.keycloakService = keycloakService;
     }
 
 
-    @PostMapping("/create-account")
+    @PostMapping("/accounts")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<URI> createAccount(@Valid @RequestBody KeycloakSignupRequest keycloakSignupRequest) {
         return  keycloakService.signup(keycloakSignupRequest);
@@ -43,5 +43,11 @@ public class SignupController {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
         return  profileService.signUp(parentId, signupRequest);
+    }
+
+    @DeleteMapping("/accounts/{accountId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> deleteUserAccount(@PathVariable UUID accountId){
+        return profileService.deleteUser(accountId);
     }
 }

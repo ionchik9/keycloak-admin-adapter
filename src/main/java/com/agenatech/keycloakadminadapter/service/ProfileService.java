@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface ProfileService {
     Mono<UserProfile>signUp(UUID parentId, SignupRequest signupRequest);
     Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile);
+    Mono<Void> deleteUser(UUID userId);
 }

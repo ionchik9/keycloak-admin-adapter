@@ -24,6 +24,7 @@ import reactor.netty.transport.logging.AdvancedByteBufFormat;
 import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Service
@@ -69,6 +70,16 @@ public class KeycloakClient {
                 .retrieve()
                 .toBodilessEntity()
                 .map(clientResponse -> clientResponse.getHeaders().getLocation());
+    }
+
+    public Mono<Void> deleteAccount(UUID userId, String adminToken) {
+        return webClient
+                .delete()
+                .uri(clientConfig.getUsersUri() + "/" + userId)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", adminToken)
+                .retrieve()
+                .bodyToMono(Void.class);
     }
 
     MultiValueMap<String, String> convertToForm(Object obj) {

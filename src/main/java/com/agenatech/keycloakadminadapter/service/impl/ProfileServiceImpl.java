@@ -41,6 +41,13 @@ public class ProfileServiceImpl implements ProfileService {
         return profilesClient.createProfile(profileId, userProfile);
     }
 
+//    todo error handling
+    @Override
+    public Mono<Void> deleteUser(UUID userId) {
+        return keycloakService.deleteAccount(userId)
+                .then(profilesClient.deleteProfile(userId));
+    }
+
 
     private Mono<String> registerUser(SignupRequest request) {
         return keycloakService.signup(request)

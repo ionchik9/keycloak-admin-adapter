@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -44,6 +45,12 @@ public class KeycloakServiceImpl implements KeycloakService {
     public Mono<URI> signup(KeycloakSignupRequest request) {
         return adminLogin()
                 .flatMap(authResponse -> keycloackClient.createAccount(request, "Bearer " + authResponse.accessToken()));
+    }
+
+    @Override
+    public Mono<Void> deleteAccount(UUID accountId) {
+        return adminLogin()
+                .flatMap(authResponse -> keycloackClient.deleteAccount(accountId, "Bearer " + authResponse.accessToken()));
     }
 
 
