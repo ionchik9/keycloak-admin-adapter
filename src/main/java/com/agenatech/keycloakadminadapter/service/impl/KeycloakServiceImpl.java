@@ -22,6 +22,8 @@ public class KeycloakServiceImpl implements KeycloakService {
     private final KeycloakClient keycloackClient;
     private final KeycloakConfig keycloackConfig;
 
+    private static final String BEARER = "Bearer ";
+
     @Autowired
     public KeycloakServiceImpl(KeycloakClient keycloackClient, KeycloakConfig keycloackConfig) {
         this.keycloackClient = keycloackClient;
@@ -38,19 +40,19 @@ public class KeycloakServiceImpl implements KeycloakService {
                         .enabled(Optional.ofNullable(request.getEnabled()).orElse(true))
                         .build();
         return adminLogin()
-                .flatMap(authResponse -> keycloackClient.createAccount(signupRequest, "Bearer " + authResponse.accessToken()));
+                .flatMap(authResponse -> keycloackClient.createAccount(signupRequest, BEARER + authResponse.accessToken()));
     }
 
     @Override
     public Mono<URI> signup(KeycloakSignupRequest request) {
         return adminLogin()
-                .flatMap(authResponse -> keycloackClient.createAccount(request, "Bearer " + authResponse.accessToken()));
+                .flatMap(authResponse -> keycloackClient.createAccount(request, BEARER + authResponse.accessToken()));
     }
 
     @Override
     public Mono<Void> deleteAccount(UUID accountId) {
         return adminLogin()
-                .flatMap(authResponse -> keycloackClient.deleteAccount(accountId, "Bearer " + authResponse.accessToken()));
+                .flatMap(authResponse -> keycloackClient.deleteAccount(accountId,  BEARER + authResponse.accessToken()));
     }
 
 
