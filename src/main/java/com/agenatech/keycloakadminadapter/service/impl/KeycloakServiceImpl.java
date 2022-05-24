@@ -32,7 +32,7 @@ public class KeycloakServiceImpl implements KeycloakService {
         KeycloakSignupRequest signupRequest =
                 KeycloakSignupRequest
                         .builder()
-                        .username(request.getEmail())
+                        .email(request.getEmail())
                         .credentials(request.getCredentials())
                         .enabled(Optional.ofNullable(request.getEnabled()).orElse(true))
                         .build();

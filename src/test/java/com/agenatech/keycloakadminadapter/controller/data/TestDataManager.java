@@ -21,7 +21,7 @@ public class TestDataManager {
 
     public static KeycloakSignupRequest generateKeycloakSignupRequest(){
         return KeycloakSignupRequest.builder()
-                .username("test")
+                .email("test")
                 .enabled(true)
                 .credentials(List.of(KeycloakCredentials.builder()
                         .temporary(false)

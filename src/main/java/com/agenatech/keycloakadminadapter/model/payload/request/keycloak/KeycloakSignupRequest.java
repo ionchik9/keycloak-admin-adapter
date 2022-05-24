@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class KeycloakSignupRequest {
     @NotBlank
-    private String username;
+    private String email;
     private boolean enabled;
     @NotNull
     private List<KeycloakCredentials> credentials;
