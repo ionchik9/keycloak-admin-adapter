@@ -60,7 +60,7 @@ public class SignupControllerReactiveTests {
 		Mockito.when(keycloakClient.getCliToken(any())).thenReturn(Mono.just(TestDataManager.generateAuthResponse()));
 
 		webTestClient.post()
-				.uri(CONTROLLER_URL_ROOT_PREFIX + "create-account/")
+				.uri(CONTROLLER_URL_ROOT_PREFIX + "accounts")
 				.body(BodyInserters.fromValue(TestDataManager.generateKeycloakSignupRequest()))
 				.accept(MediaType.APPLICATION_JSON)
 				.exchange()
