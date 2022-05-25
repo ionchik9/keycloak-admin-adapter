@@ -15,7 +15,6 @@ import java.util.UUID;
 public class UserProfile {
     private UUID id;
 
-    @NotBlank
     private String email;
 
     private String firstName;

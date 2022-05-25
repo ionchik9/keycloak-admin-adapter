@@ -2,6 +2,7 @@ package com.agenatech.keycloakadminadapter.service.impl;
 
 import com.agenatech.keycloakadminadapter.client.KeycloakClient;
 import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
+import com.agenatech.keycloakadminadapter.model.payload.UserAccount;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakAdminTokenRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
@@ -53,6 +54,12 @@ public class KeycloakServiceImpl implements KeycloakService {
     public Mono<Void> deleteAccount(UUID accountId) {
         return adminLogin()
                 .flatMap(authResponse -> keycloackClient.deleteAccount(accountId,  BEARER + authResponse.accessToken()));
+    }
+
+    @Override
+    public Mono<UserAccount> getAccount(UUID accountId) {
+        return adminLogin()
+                .flatMap(authResponse -> keycloackClient.getAccount(accountId,  BEARER + authResponse.accessToken()));
     }
 
 

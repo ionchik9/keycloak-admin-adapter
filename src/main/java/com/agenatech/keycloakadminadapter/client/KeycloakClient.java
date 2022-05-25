@@ -2,6 +2,7 @@ package com.agenatech.keycloakadminadapter.client;
 
 
 import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
+import com.agenatech.keycloakadminadapter.model.payload.UserAccount;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakAdminTokenRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
 import com.agenatech.keycloakadminadapter.model.payload.response.AuthResponse;
@@ -80,6 +81,16 @@ public class KeycloakClient {
                 .header("Authorization", adminToken)
                 .retrieve()
                 .bodyToMono(Void.class);
+    }
+
+    public Mono<UserAccount> getAccount(UUID userId, String adminToken) {
+        return webClient
+                .get()
+                .uri(clientConfig.getUsersUri() + "/" + userId)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", adminToken)
+                .retrieve()
+                .bodyToMono(UserAccount.class);
     }
 
     MultiValueMap<String, String> convertToForm(Object obj) {

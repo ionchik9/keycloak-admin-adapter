@@ -1,5 +1,6 @@
 package com.agenatech.keycloakadminadapter.controller;
 
+import com.agenatech.keycloakadminadapter.model.payload.UserAccount;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
@@ -43,6 +44,12 @@ public class Controller {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
         return  profileService.signUp(parentId, signupRequest);
+    }
+
+    @GetMapping("/accounts/{accountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<UserAccount> getAccount(@PathVariable UUID accountId) {
+        return keycloakService.getAccount(accountId);
     }
 
     @DeleteMapping("/accounts/{accountId}")
