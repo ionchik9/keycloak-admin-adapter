@@ -46,7 +46,7 @@ public class Controller {
         return  profileService.signUp(parentId, signupRequest);
     }
 
-    @GetMapping("/accounts/{accountId}")
+    @GetMapping("/admin/accounts/{accountId}")
     @ResponseStatus(HttpStatus.OK)
     public Mono<UserAccount> getAccount(@PathVariable UUID accountId) {
         return keycloakService.getAccount(accountId);
