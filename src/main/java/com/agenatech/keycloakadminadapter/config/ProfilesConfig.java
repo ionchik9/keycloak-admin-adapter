@@ -1,17 +1,9 @@
 package com.agenatech.keycloakadminadapter.config;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
-@Configuration
 @ConfigurationProperties(prefix = "profiles")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ProfilesConfig {
-    private String path;
-    private String url;
+@Profile("!test")
+public record ProfilesConfig(String path, String url){
 }

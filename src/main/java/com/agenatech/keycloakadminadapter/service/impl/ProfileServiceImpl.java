@@ -6,10 +6,10 @@ import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import com.agenatech.keycloakadminadapter.service.ProfileService;
 import com.agenatech.keycloakadminadapter.utils.UriUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -17,15 +17,10 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ProfileServiceImpl implements ProfileService {
     private final KeycloakService keycloakService;
     private final ProfilesClient profilesClient;
-
-    @Autowired
-    public ProfileServiceImpl(KeycloakService keycloakService, ProfilesClient profilesClient) {
-        this.keycloakService = keycloakService;
-        this.profilesClient = profilesClient;
-    }
 
 
 

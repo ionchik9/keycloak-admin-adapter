@@ -40,7 +40,7 @@ public class ProfilesClient {
     @PostConstruct
     public void init(){
         webClient = WebClient.builder()
-                .baseUrl(profilesConfig.getUrl())
+                .baseUrl(profilesConfig.url())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .clientConnector(new ReactorClientHttpConnector(
                         HttpClient.create().wiretap("reactor.netty.http.client.HttpClient", LogLevel.DEBUG, AdvancedByteBufFormat.TEXTUAL)
@@ -51,7 +51,7 @@ public class ProfilesClient {
     public Mono<UserProfile> createProfile(String id, UserProfile userProfile) {
         return webClient
                 .put()
-                .uri(profilesConfig.getPath()+"/{id}", id)
+                .uri(profilesConfig.path()+"/{id}", id)
                 .body(BodyInserters.fromValue(userProfile))
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
@@ -62,7 +62,7 @@ public class ProfilesClient {
     public Mono<Void> deleteProfile(UUID profileId){
         return webClient
                 .delete()
-                .uri(profilesConfig.getPath()+"/{profileId}", profileId)
+                .uri(profilesConfig.path()+"/{profileId}", profileId)
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
                         .flatMap(error -> Mono.error(new ProfilesException(error.message(), profileId.toString(), response.statusCode()))))

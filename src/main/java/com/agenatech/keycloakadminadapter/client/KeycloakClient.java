@@ -32,19 +32,19 @@ import java.util.UUID;
 public class KeycloakClient {
     private WebClient webClient;
 
-    private final KeycloakConfig clientConfig;
+    private final KeycloakConfig keycloakConfig;
     private final ObjectMapper objectMapper;
 
     @Autowired
     public KeycloakClient(KeycloakConfig clientConfig, ObjectMapper objectMapper) {
-        this.clientConfig = clientConfig;
+        this.keycloakConfig = clientConfig;
         this.objectMapper = objectMapper;
     }
 
     @PostConstruct
     public void init(){
         webClient = WebClient.builder()
-                .baseUrl(clientConfig.getUrl())
+                .baseUrl(keycloakConfig.url())
                 .clientConnector(new ReactorClientHttpConnector(
                         HttpClient.create().wiretap("reactor.netty.http.client.HttpClient", LogLevel.DEBUG, AdvancedByteBufFormat.TEXTUAL)
                 ))
@@ -54,7 +54,7 @@ public class KeycloakClient {
     public Mono<AuthResponse> getCliToken(KeycloakAdminTokenRequest adminTokenRequest) {
         return webClient
                 .post()
-                .uri(clientConfig.getCliTokenUri())
+                .uri(keycloakConfig.cliTokenUri())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
                 .body(BodyInserters.fromFormData(convertToForm(adminTokenRequest)))
                 .retrieve()
@@ -64,7 +64,7 @@ public class KeycloakClient {
     public Mono<URI> createAccount(KeycloakSignupRequest signupRequest, String adminToken) {
         return webClient
                 .post()
-                .uri(clientConfig.getUsersUri())
+                .uri(keycloakConfig.usersUri())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", adminToken)
                 .body(BodyInserters.fromValue(signupRequest))
@@ -76,7 +76,7 @@ public class KeycloakClient {
     public Mono<Void> deleteAccount(UUID userId, String adminToken) {
         return webClient
                 .delete()
-                .uri(clientConfig.getUsersUri() + "/" + userId)
+                .uri(keycloakConfig.usersUri() + "/" + userId)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", adminToken)
                 .retrieve()
@@ -86,11 +86,15 @@ public class KeycloakClient {
     public Mono<UserAccount> getAccount(UUID userId, String adminToken) {
         return webClient
                 .get()
-                .uri(clientConfig.getUsersUri() + "/" + userId)
+                .uri(keycloakConfig.usersUri() + "/" + userId)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .header("Authorization", adminToken)
                 .retrieve()
                 .bodyToMono(UserAccount.class);
+    }
+
+    public String getAdminSecret(){
+        return keycloakConfig.adminSecret();
     }
 
     MultiValueMap<String, String> convertToForm(Object obj) {
