@@ -1,6 +1,7 @@
 package com.agenatech.keycloakadminadapter.service.impl;
 
 import com.agenatech.keycloakadminadapter.client.KeycloakClient;
+import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
 import com.agenatech.keycloakadminadapter.model.payload.UserAccount;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakAdminTokenRequest;
@@ -21,6 +22,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class KeycloakServiceImpl implements KeycloakService {
     private final KeycloakClient keycloackClient;
+    private final KeycloakConfig keycloackConfig;
 
     private static final String BEARER = "Bearer ";
 
@@ -62,7 +64,7 @@ public class KeycloakServiceImpl implements KeycloakService {
                 KeycloakAdminTokenRequest
                         .builder()
                         .clientId("admin-cli")
-                        .clientSecret(keycloackClient.getAdminSecret())
+                        .clientSecret(keycloackConfig.adminSecret())
                         .grantType("client_credentials")
                         .build();
         return keycloackClient.getCliToken(adminTokenRequest);

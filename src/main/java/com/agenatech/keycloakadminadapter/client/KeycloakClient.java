@@ -93,9 +93,6 @@ public class KeycloakClient {
                 .bodyToMono(UserAccount.class);
     }
 
-    public String getAdminSecret(){
-        return keycloakConfig.adminSecret();
-    }
 
     MultiValueMap<String, String> convertToForm(Object obj) {
         var parameters = new LinkedMultiValueMap<String, String>();
