@@ -74,7 +74,8 @@ pipeline {
         stage('Helm Deploy') {
             steps {
                 sh 'helm upgrade --install --atomic --kube-context=${CLUSTER} ${APP_NAME}-${ENVIRONMENT} helm \
-                    --set environment=${ENVIRONMENT}'
+                    --set environment=${ENVIRONMENT} \
+                    --set application.image=${IMAGE_NAME_LATEST} '
                 }
             }
         }
