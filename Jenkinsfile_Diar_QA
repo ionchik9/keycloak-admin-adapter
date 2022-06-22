@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         APP_NAME       = 'keycloak-admin-adapter'
-        ENVIRONMENT    = 'development'
+        ENVIRONMENT    = 'qa'
         CLUSTER        = 'development'
-        IMAGE_REPO     = '940465383180.dkr.ecr.eu-north-1.amazonaws.com/keycloak-admin-adapter-dev'
+        IMAGE_REPO     = '940465383180.dkr.ecr.eu-north-1.amazonaws.com/keycloak-admin-adapter-qa'
         REGION         = 'eu-north-1'
         ACCOUNT        = '940465383180'
     }
