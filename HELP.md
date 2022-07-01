@@ -2,8 +2,8 @@
 sonar key:
 mvn clean verify sonar:sonar \
 -Dsonar.projectKey=KC-admin-adapter \
--Dsonar.host.url=https://sonarqube.agenadev.com \
--Dsonar.login=37c152bfa14545192b297b449bc9f2187a888d52
+-Dsonar.host.url=https://sonarqube.thehousehealth.com \
+-Dsonar.login=9e31dc7a8e462cf40b6d7da29019da30339bf371
 # Getting Started
 
 ### Reference Documentation
