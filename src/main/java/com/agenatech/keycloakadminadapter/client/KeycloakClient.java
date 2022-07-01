@@ -35,6 +35,8 @@ public class KeycloakClient {
     private final KeycloakConfig keycloakConfig;
     private final ObjectMapper objectMapper;
 
+    public static final String AUTHORIZATION_HEADER_NAME = "Authorization";
+
     @Autowired
     public KeycloakClient(KeycloakConfig clientConfig, ObjectMapper objectMapper) {
         this.keycloakConfig = clientConfig;
@@ -66,7 +68,7 @@ public class KeycloakClient {
                 .post()
                 .uri(keycloakConfig.usersUri())
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", adminToken)
+                .header(AUTHORIZATION_HEADER_NAME, adminToken)
                 .body(BodyInserters.fromValue(signupRequest))
                 .retrieve()
                 .toBodilessEntity()
@@ -78,7 +80,7 @@ public class KeycloakClient {
                 .delete()
                 .uri(keycloakConfig.usersUri() + "/" + userId)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", adminToken)
+                .header(AUTHORIZATION_HEADER_NAME, adminToken)
                 .retrieve()
                 .bodyToMono(Void.class);
     }
@@ -88,7 +90,7 @@ public class KeycloakClient {
                 .get()
                 .uri(keycloakConfig.usersUri() + "/" + userId)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", adminToken)
+                .header(AUTHORIZATION_HEADER_NAME, adminToken)
                 .retrieve()
                 .bodyToMono(UserAccount.class);
     }
