@@ -1,6 +1,7 @@
 package com.agenatech.keycloakadminadapter.model.payload;
 
 
+import com.agenatech.keycloakadminadapter.model.payload.enums.Language;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,6 +20,8 @@ public class UserProfile {
     private String firstName;
 
     private String lastName;
+
+    private Language language;
 
     private UUID parentId;
 

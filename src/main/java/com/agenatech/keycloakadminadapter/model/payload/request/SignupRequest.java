@@ -1,6 +1,7 @@
 package com.agenatech.keycloakadminadapter.model.payload.request;
 
 import com.agenatech.keycloakadminadapter.model.payload.KeycloakCredentials;
+import com.agenatech.keycloakadminadapter.model.payload.enums.Language;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class SignupRequest {
     private String mobileNumber;
     private String additionalDetails;
     private String avatarUrl;
+
+    private Language language;
 
     private Boolean enabled;
     @NotNull
