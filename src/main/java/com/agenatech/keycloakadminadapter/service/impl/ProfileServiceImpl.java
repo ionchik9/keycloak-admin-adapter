@@ -32,7 +32,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile) {
-        userProfile.setParentId(parentId);
+//        userProfile.setParentId(parentId);
         return profilesClient.createProfile(profileId, userProfile);
     }
 
