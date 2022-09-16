@@ -32,14 +32,6 @@ public class KeycloakServiceImpl implements KeycloakService {
     @SneakyThrows
     public <T extends SignupRequest> Mono<URI> signup(T request) {
         var signupRequest = new KeycloakSignupRequest();
-//                KeycloakSignupRequest
-//                        .builder()
-//                        .email(request.getEmail())
-//                        .credentials(request.getCredentials())
-//                        .enabled(Optional.ofNullable(request.getEnabled()).orElse(true))
-//                        .build();
-//        if(request instanceof SignupTherapistRequest)
-//            signupRequest.setGroups(((SignupTherapistRequest) request).getGroups());
         BeanUtils.copyProperties(signupRequest, request);
         return adminLogin()
                 .flatMap(authResponse -> keycloackClient.createAccount(signupRequest, BEARER + authResponse.accessToken()));
