@@ -48,7 +48,7 @@ public class Controller {
         return  profileService.signUp(parentId, signupRequest);
     }
 
-    @PostMapping("/admin/create-therapist")
+    @PostMapping("/admin/therapists")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<TherapistProfile>createTherapist(@Valid @RequestBody SignupTherapistRequest signupRequest)  {
         return profileService.createTherapist(signupRequest);
