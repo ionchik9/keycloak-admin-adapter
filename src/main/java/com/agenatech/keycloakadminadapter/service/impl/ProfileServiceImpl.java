@@ -63,7 +63,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Mono<Void> deleteTherapist(UUID userId) {
-        return profilesClient.deleteProfile(userId)
+        return profilesClient.deleteTherapistProfile(userId)
                 .then(keycloakService.deleteAccount(userId));
     }
 

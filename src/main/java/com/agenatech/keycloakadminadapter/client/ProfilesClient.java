@@ -74,6 +74,16 @@ public class ProfilesClient {
     public Mono<Void> deleteProfile(UUID profileId){
         return webClient
                 .delete()
+                .uri(profilesConfig.path()+"/{profileId}", profileId)
+                .retrieve()
+                .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
+                        .flatMap(error -> Mono.error(new ProfilesException(error.message(), profileId.toString(), response.statusCode()))))
+                .bodyToMono(Void.class);
+    }
+
+    public Mono<Void> deleteTherapistProfile(UUID profileId){
+        return webClient
+                .delete()
                 .uri(profilesConfig.therapistPath()+"/{profileId}", profileId)
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
