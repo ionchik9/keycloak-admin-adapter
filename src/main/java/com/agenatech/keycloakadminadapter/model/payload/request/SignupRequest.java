@@ -26,7 +26,7 @@ public class SignupRequest {
 
     private Language language;
 
-    private Boolean enabled;
+    private boolean enabled;
     @NotNull
     private List<KeycloakCredentials> credentials;
 }

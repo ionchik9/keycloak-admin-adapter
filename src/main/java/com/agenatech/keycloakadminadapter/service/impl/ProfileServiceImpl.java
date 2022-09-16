@@ -1,8 +1,11 @@
 package com.agenatech.keycloakadminadapter.service.impl;
 
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
+import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
+import com.agenatech.keycloakadminadapter.model.payload.TherapistProfile;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
+import com.agenatech.keycloakadminadapter.model.payload.request.SignupTherapistRequest;
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import com.agenatech.keycloakadminadapter.service.ProfileService;
 import com.agenatech.keycloakadminadapter.utils.UriUtils;
@@ -13,6 +16,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -21,38 +25,58 @@ import java.util.UUID;
 public class ProfileServiceImpl implements ProfileService {
     private final KeycloakService keycloakService;
     private final ProfilesClient profilesClient;
+    private final KeycloakConfig keycloakConfig;
 
 
 
     @Override
-    public  Mono<UserProfile> signUp(UUID parentId, SignupRequest signupRequest) {
+    public Mono<UserProfile> signUp(UUID parentId, SignupRequest signupRequest) {
         return registerUser(signupRequest)
-                .flatMap(userId -> createProfile(parentId, userId, signupRequestToUserProfile(signupRequest)));
+                .flatMap(userId -> createProfile(parentId, userId, signupRequestToProfile(signupRequest, UserProfile.class)));
+    }
+
+    @Override
+    public Mono<TherapistProfile> createTherapist(SignupTherapistRequest signupRequest) {
+        signupRequest.setGroups(List.of(keycloakConfig.therapistGroupName()));
+        return registerUser(signupRequest)
+                .flatMap(userId -> createTherapistProfile(userId, signupRequestToProfile(signupRequest, TherapistProfile.class)));
     }
 
     @Override
     public Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile) {
+        log.debug(" to create profile {}", profileId);
 //        userProfile.setParentId(parentId);
         return profilesClient.createProfile(profileId, userProfile);
+    }
+
+    @Override
+    public Mono<TherapistProfile> createTherapistProfile(String profileId, TherapistProfile profile) {
+        return profilesClient.createTherapistProfile(profileId, profile);
     }
 
 //    todo error handling
     @Override
     public Mono<Void> deleteUser(UUID userId) {
-        return keycloakService.deleteAccount(userId)
-                .then(profilesClient.deleteProfile(userId));
+        return profilesClient.deleteProfile(userId)
+                .then(keycloakService.deleteAccount(userId));
+    }
+
+    @Override
+    public Mono<Void> deleteTherapist(UUID userId) {
+        return profilesClient.deleteTherapistProfile(userId)
+                .then(keycloakService.deleteAccount(userId));
     }
 
 
-    private Mono<String> registerUser(SignupRequest request) {
+    private <T extends SignupRequest> Mono<String> registerUser(T request) {
         return keycloakService.signup(request)
                 .map(UriUtils::getLocationId);
     }
 
 
     @SneakyThrows
-    private UserProfile signupRequestToUserProfile(SignupRequest signupRequest) {
-        var profile = new UserProfile();
+    private  <T extends SignupRequest, C> C signupRequestToProfile(T signupRequest, Class<C> clazz) {
+        var profile = clazz.getDeclaredConstructor().newInstance();
         BeanUtils.copyProperties(profile, signupRequest);
         return profile;
     }

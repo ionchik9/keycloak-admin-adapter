@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 
 @ConfigurationProperties(prefix = "auth-server")
 @Profile("!test")
-public record KeycloakConfig(String url, String adminSecret, String cliTokenUri, String usersUri) {
+public record KeycloakConfig(String url, String adminSecret, String cliTokenUri, String usersUri, String therapistGroupName) {
 }
 
 

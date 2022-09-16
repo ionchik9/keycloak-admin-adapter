@@ -85,6 +85,17 @@ public class KeycloakClient {
                 .bodyToMono(Void.class);
     }
 
+
+    public Mono<Void> setTherapistRole(UUID userId, String adminToken) {
+        return webClient
+                .post()
+                .uri(keycloakConfig.usersUri() + "/" + userId)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .header(AUTHORIZATION_HEADER_NAME, adminToken)
+                .retrieve()
+                .bodyToMono(Void.class);
+    }
+
     public Mono<UserAccount> getAccount(UUID userId, String adminToken) {
         return webClient
                 .get()

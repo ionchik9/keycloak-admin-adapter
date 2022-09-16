@@ -9,12 +9,13 @@ import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.Keycloa
 import com.agenatech.keycloakadminadapter.model.payload.response.AuthResponse;
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.net.URI;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,14 +29,10 @@ public class KeycloakServiceImpl implements KeycloakService {
 
 
     @Override
-    public Mono<URI> signup(SignupRequest request) {
-        KeycloakSignupRequest signupRequest =
-                KeycloakSignupRequest
-                        .builder()
-                        .email(request.getEmail())
-                        .credentials(request.getCredentials())
-                        .enabled(Optional.ofNullable(request.getEnabled()).orElse(true))
-                        .build();
+    @SneakyThrows
+    public <T extends SignupRequest> Mono<URI> signup(T request) {
+        var signupRequest = new KeycloakSignupRequest();
+        BeanUtils.copyProperties(signupRequest, request);
         return adminLogin()
                 .flatMap(authResponse -> keycloackClient.createAccount(signupRequest, BEARER + authResponse.accessToken()));
     }

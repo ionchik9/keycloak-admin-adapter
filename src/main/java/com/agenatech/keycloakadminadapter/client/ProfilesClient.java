@@ -4,6 +4,7 @@ package com.agenatech.keycloakadminadapter.client;
 import com.agenatech.keycloakadminadapter.config.ProfilesConfig;
 import com.agenatech.keycloakadminadapter.exception.ErrorDto;
 import com.agenatech.keycloakadminadapter.exception.ProfilesException;
+import com.agenatech.keycloakadminadapter.model.payload.TherapistProfile;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import io.netty.handler.logging.LogLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,10 +60,31 @@ public class ProfilesClient {
                 .bodyToMono(UserProfile.class);
     }
 
+    public Mono<TherapistProfile> createTherapistProfile(String id, TherapistProfile profile) {
+        return webClient
+                .put()
+                .uri(profilesConfig.therapistPath()+"/{id}", id)
+                .body(BodyInserters.fromValue(profile))
+                .retrieve()
+                .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
+                        .flatMap(error -> Mono.error(new ProfilesException(error.message(), id, response.statusCode()))))
+                .bodyToMono(TherapistProfile.class);
+    }
+
     public Mono<Void> deleteProfile(UUID profileId){
         return webClient
                 .delete()
                 .uri(profilesConfig.path()+"/{profileId}", profileId)
+                .retrieve()
+                .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
+                        .flatMap(error -> Mono.error(new ProfilesException(error.message(), profileId.toString(), response.statusCode()))))
+                .bodyToMono(Void.class);
+    }
+
+    public Mono<Void> deleteTherapistProfile(UUID profileId){
+        return webClient
+                .delete()
+                .uri(profilesConfig.therapistPath()+"/{profileId}", profileId)
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
                         .flatMap(error -> Mono.error(new ProfilesException(error.message(), profileId.toString(), response.statusCode()))))
