@@ -14,4 +14,5 @@ public interface ProfileService {
     Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile);
     Mono<TherapistProfile> createTherapistProfile(String profileId, TherapistProfile profile);
     Mono<Void> deleteUser(UUID userId);
+    Mono<Void> deleteTherapist(UUID userId);
 }

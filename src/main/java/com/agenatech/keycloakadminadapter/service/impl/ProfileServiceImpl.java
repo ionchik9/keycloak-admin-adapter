@@ -57,8 +57,14 @@ public class ProfileServiceImpl implements ProfileService {
 //    todo error handling
     @Override
     public Mono<Void> deleteUser(UUID userId) {
-        return keycloakService.deleteAccount(userId)
-                .then(profilesClient.deleteProfile(userId));
+        return profilesClient.deleteProfile(userId)
+                .then(keycloakService.deleteAccount(userId));
+    }
+
+    @Override
+    public Mono<Void> deleteTherapist(UUID userId) {
+        return profilesClient.deleteProfile(userId)
+                .then(keycloakService.deleteAccount(userId));
     }
 
 
