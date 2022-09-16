@@ -60,13 +60,13 @@ public class Controller {
         return keycloakService.getAccount(accountId);
     }
 
-    @DeleteMapping("/accounts/{accountId}")
+    @DeleteMapping("/admin/accounts/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> deleteUserAccount(@PathVariable UUID accountId){
         return profileService.deleteUser(accountId);
     }
 
-    @DeleteMapping("/therapists/{accountId}")
+    @DeleteMapping("/admin/therapists/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> deleteTherapist(@PathVariable UUID accountId){
         return profileService.deleteTherapist(accountId);
