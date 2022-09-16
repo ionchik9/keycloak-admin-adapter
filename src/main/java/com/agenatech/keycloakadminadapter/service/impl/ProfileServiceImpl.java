@@ -44,6 +44,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile) {
+        log.debug(" to create profile {}", profileId);
 //        userProfile.setParentId(parentId);
         return profilesClient.createProfile(profileId, userProfile);
     }

@@ -9,7 +9,7 @@ import java.net.URI;
 import java.util.UUID;
 
 public interface KeycloakService {
-    Mono<URI> signup(SignupRequest request);
+    <T extends SignupRequest> Mono<URI> signup(T request);
     Mono<URI> signup(KeycloakSignupRequest request);
     Mono<Void> deleteAccount(UUID accountId);
     Mono<UserAccount> getAccount(UUID accountId);

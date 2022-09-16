@@ -44,13 +44,13 @@ public class Controller {
 
     @PostMapping("{parentId}/create-account-profile")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
+    public Mono<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest)  {
         return  profileService.signUp(parentId, signupRequest);
     }
 
     @PostMapping("/admin/create-therapist")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<TherapistProfile>createTherapist(@Valid @RequestBody SignupTherapistRequest signupRequest) {
+    public Mono<TherapistProfile>createTherapist(@Valid @RequestBody SignupTherapistRequest signupRequest)  {
         return profileService.createTherapist(signupRequest);
     }
 

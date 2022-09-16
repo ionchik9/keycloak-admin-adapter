@@ -18,4 +18,6 @@ public class KeycloakSignupRequest {
     private boolean enabled;
     @NotNull
     private List<KeycloakCredentials> credentials;
+
+    private List<String> groups;
 }
