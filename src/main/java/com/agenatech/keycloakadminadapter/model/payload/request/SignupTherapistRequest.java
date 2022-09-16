@@ -9,4 +9,7 @@ public class SignupTherapistRequest extends SignupRequest{
 
     private List<String> states;
 
+
+    private List<String> groups;
+
 }

@@ -1,6 +1,7 @@
 package com.agenatech.keycloakadminadapter.service.impl;
 
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
+import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
 import com.agenatech.keycloakadminadapter.model.payload.TherapistProfile;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
@@ -15,6 +16,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,6 +25,7 @@ import java.util.UUID;
 public class ProfileServiceImpl implements ProfileService {
     private final KeycloakService keycloakService;
     private final ProfilesClient profilesClient;
+    private final KeycloakConfig keycloakConfig;
 
 
 
@@ -34,6 +37,7 @@ public class ProfileServiceImpl implements ProfileService {
 
     @Override
     public Mono<TherapistProfile> createTherapist(SignupTherapistRequest signupRequest) {
+        signupRequest.setGroups(List.of(keycloakConfig.therapistGroupName()));
         return registerUser(signupRequest)
                 .flatMap(userId -> createTherapistProfile(userId, signupRequestToProfile(signupRequest, TherapistProfile.class)));
     }
