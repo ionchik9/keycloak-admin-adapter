@@ -1,8 +1,10 @@
 package com.agenatech.keycloakadminadapter.controller;
 
+import com.agenatech.keycloakadminadapter.model.payload.TherapistProfile;
 import com.agenatech.keycloakadminadapter.model.payload.UserAccount;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
+import com.agenatech.keycloakadminadapter.model.payload.request.SignupTherapistRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import com.agenatech.keycloakadminadapter.service.ProfileService;
@@ -44,6 +46,12 @@ public class Controller {
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest) {
         return  profileService.signUp(parentId, signupRequest);
+    }
+
+    @PostMapping("/create-therapist")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Mono<TherapistProfile>createTherapist(@Valid @RequestBody SignupTherapistRequest signupRequest) {
+        return profileService.createTherapist(signupRequest);
     }
 
     @GetMapping("/admin/accounts/{accountId}")
