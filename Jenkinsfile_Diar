@@ -3,10 +3,11 @@ pipeline {
 
     environment {
         APP_NAME       = 'keycloak-admin-adapter'
-        ENVIRONMENT    = 'diar'
-        IMAGE_REPO     = '406327436908.dkr.ecr.eu-north-1.amazonaws.com/agenatech/keycloak-admin-adapter'
+        ENVIRONMENT    = 'production'
+        CLUSTER        = 'production'
+        IMAGE_REPO     = '940465383180.dkr.ecr.eu-north-1.amazonaws.com/keycloak-admin-adapter'
         REGION         = 'eu-north-1'
-        ACCOUNT        = '406327436908'
+        ACCOUNT        = '940465383180'
     }
 
     options {
@@ -72,8 +73,9 @@ pipeline {
 
         stage('Helm Deploy') {
             steps {
-                sh 'helm upgrade --install --atomic ${APP_NAME}-${ENVIRONMENT} helm \
-                    --set environment=${ENVIRONMENT}'
+                sh 'helm upgrade --install --atomic --kube-context=${CLUSTER} ${APP_NAME}-${ENVIRONMENT} helm \
+                    --set environment=${ENVIRONMENT} \
+                    --set application.image=${IMAGE_NAME_LATEST} '
                 }
             }
         }
