@@ -9,7 +9,7 @@ public class ProfilesException extends RuntimeException {
     private final HttpStatus httpStatus;
 
     public ProfilesException(String message, String profileId, HttpStatus httpStatus) {
-        super("Error during profile creation, profileId = " + profileId + "\n original message: " + message);
+        super("Error during profile request, profileId = " + profileId + "\n original message: " + message);
         this.httpStatus = httpStatus;
         this.profileId = profileId;
     }

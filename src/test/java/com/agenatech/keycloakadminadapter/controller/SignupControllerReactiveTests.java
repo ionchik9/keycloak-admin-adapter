@@ -129,4 +129,36 @@ public class SignupControllerReactiveTests {
 		}
 	}
 
+
+	@Test
+	public void deleteProfileWithExceptionProfile() throws Exception{
+		String locationResponse = UUID.randomUUID().toString();
+
+		Mockito.when(keycloakClient.getCliToken(any())).thenReturn(Mono.just(TestDataManager.generateAuthResponse()));
+		Mockito.when(profilesClient.deleteProfile(any())).thenThrow(new ProfilesException("blabla", locationResponse, HttpStatus.BAD_REQUEST));
+
+//		check it's not involved
+		Mockito.when(keycloakClient.deleteAccount(any(), any())).thenThrow(new ProfilesException("NOPOO", locationResponse, HttpStatus.OK));
+
+
+		try (MockedStatic<UriUtils> mockedLocation = Mockito.mockStatic(UriUtils.class)) {
+			mockedLocation
+					.when( ()-> UriUtils.getLocationId(any()))
+					.thenReturn(locationResponse);
+
+
+			String response = webTestClient.delete()
+					.uri(CONTROLLER_URL_ROOT_PREFIX + "/admin/clients/{accountId}", UUID.randomUUID())
+					.accept(MediaType.APPLICATION_JSON)
+					.exchange()
+					.expectStatus().isBadRequest()
+					.returnResult(String.class)
+					.getResponseBody()
+					.blockFirst();
+
+			assertThat(response).contains(locationResponse);
+		}
+	}
+
+
 }
