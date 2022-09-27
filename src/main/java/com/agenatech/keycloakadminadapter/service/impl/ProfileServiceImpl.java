@@ -2,6 +2,7 @@ package com.agenatech.keycloakadminadapter.service.impl;
 
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
 import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
+import com.agenatech.keycloakadminadapter.exception.ProfilesException;
 import com.agenatech.keycloakadminadapter.model.payload.TherapistProfile;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -57,12 +59,14 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public Mono<Void> deleteUser(UUID userId) {
         return profilesClient.deleteProfile(userId)
+                .onErrorMap(error -> new ProfilesException(error.getMessage(), userId.toString(), HttpStatus.BAD_REQUEST))
                 .doOnSuccess(x ->keycloakService.deleteAccount(userId));
     }
 
     @Override
     public Mono<Void> deleteTherapist(UUID userId) {
         return profilesClient.deleteTherapistProfile(userId)
+                .onErrorMap(error -> new ProfilesException(error.getMessage(), userId.toString(), HttpStatus.BAD_REQUEST))
                 .doOnSuccess(x ->keycloakService.deleteAccount(userId));
     }
 

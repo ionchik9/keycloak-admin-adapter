@@ -131,7 +131,7 @@ public class SignupControllerReactiveTests {
 
 
 	@Test
-	public void deleteProfileWithExceptionProfile() throws Exception{
+	public void deleteProfileWithExceptionProfile() {
 		String locationResponse = UUID.randomUUID().toString();
 
 		Mockito.when(keycloakClient.getCliToken(any())).thenReturn(Mono.just(TestDataManager.generateAuthResponse()));
@@ -148,7 +148,7 @@ public class SignupControllerReactiveTests {
 
 
 			String response = webTestClient.delete()
-					.uri(CONTROLLER_URL_ROOT_PREFIX + "/admin/clients/{accountId}", UUID.randomUUID())
+					.uri(CONTROLLER_URL_ROOT_PREFIX + "/admin/clients/{accountId}", locationResponse)
 					.accept(MediaType.APPLICATION_JSON)
 					.exchange()
 					.expectStatus().isBadRequest()
