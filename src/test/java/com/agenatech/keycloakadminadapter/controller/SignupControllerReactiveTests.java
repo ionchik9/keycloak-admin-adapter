@@ -135,10 +135,10 @@ public class SignupControllerReactiveTests {
 		String locationResponse = UUID.randomUUID().toString();
 
 		Mockito.when(keycloakClient.getCliToken(any())).thenReturn(Mono.just(TestDataManager.generateAuthResponse()));
-		Mockito.when(profilesClient.deleteProfile(any())).thenThrow(new ProfilesException("blabla", locationResponse, HttpStatus.BAD_REQUEST));
+		Mockito.when(profilesClient.deleteProfile(any())).thenReturn(Mono.error(new ProfilesException("BLLAA", locationResponse, HttpStatus.BAD_REQUEST)));
 
 //		check it's not involved
-		Mockito.when(keycloakClient.deleteAccount(any(), any())).thenThrow(new ProfilesException("NOPOO", locationResponse, HttpStatus.OK));
+		Mockito.when(keycloakClient.deleteAccount(any(), any())).thenThrow(new ProfilesException("NOPOO", "DFSSDCS", HttpStatus.OK));
 
 
 		try (MockedStatic<UriUtils> mockedLocation = Mockito.mockStatic(UriUtils.class)) {
