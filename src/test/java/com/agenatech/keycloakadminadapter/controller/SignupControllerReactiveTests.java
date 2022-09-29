@@ -93,7 +93,11 @@ public class SignupControllerReactiveTests {
 
 			webTestClient.post()
 					.uri(CONTROLLER_URL_ROOT_PREFIX +  UUID.randomUUID() + "/create-account-profile/")
-					.body(BodyInserters.fromValue(SignupRequest.builder().email("ddd").credentials(List.of(KeycloakCredentials.builder().build())).build()))
+					.body(BodyInserters.fromValue(SignupRequest.builder()
+							.email("ddd")
+							.firstName("dew")
+							.lastName("sdc")
+							.credentials(List.of(KeycloakCredentials.builder().build())).build()))
 					.accept(MediaType.APPLICATION_JSON)
 					.exchange()
 					.expectStatus().isCreated();
@@ -117,7 +121,11 @@ public class SignupControllerReactiveTests {
 
 			String response = webTestClient.post()
 					.uri(CONTROLLER_URL_ROOT_PREFIX +  UUID.randomUUID() + "/create-account-profile/")
-					.body(BodyInserters.fromValue(SignupRequest.builder().email("ddd").credentials(List.of(KeycloakCredentials.builder().build())).build()))
+					.body(BodyInserters.fromValue(SignupRequest.builder()
+							.email("ddd")
+							.firstName("dew")
+							.lastName("sdc")
+							.credentials(List.of(KeycloakCredentials.builder().build())).build()))
 					.accept(MediaType.APPLICATION_JSON)
 					.exchange()
 					.expectStatus().is4xxClientError()
