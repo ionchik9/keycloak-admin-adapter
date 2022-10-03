@@ -32,9 +32,9 @@ public class ProfileServiceImpl implements ProfileService {
 
 
     @Override
-    public Mono<UserProfile> signUp(UUID parentId, SignupRequest signupRequest) {
+    public Mono<UserProfile> signUp(SignupRequest signupRequest) {
         return registerUser(signupRequest)
-                .flatMap(userId -> createProfile(parentId, userId, signupRequestToProfile(signupRequest, UserProfile.class)));
+                .flatMap(userId -> createProfile(userId, signupRequestToProfile(signupRequest, UserProfile.class)));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile) {
+    public Mono<UserProfile> createProfile(String profileId, UserProfile userProfile) {
         log.debug(" to create profile {}", profileId);
 //        userProfile.setParentId(parentId);
         return profilesClient.createProfile(profileId, userProfile);

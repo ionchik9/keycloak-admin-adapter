@@ -73,7 +73,7 @@ public class SignupControllerReactiveTests {
 		UUID profileId = UUID.randomUUID();
 
 		webTestClient.put()
-				.uri(CONTROLLER_URL_ROOT_PREFIX +  UUID.randomUUID() + "/create-profile/" + profileId)
+				.uri(CONTROLLER_URL_ROOT_PREFIX +  "/create-profile/" + profileId)
 				.body(BodyInserters.fromValue(TestDataManager.generateUserProfile(profileId)))
 				.accept(MediaType.APPLICATION_JSON)
 				.exchange()
@@ -92,7 +92,7 @@ public class SignupControllerReactiveTests {
 					.thenReturn(UUID.randomUUID().toString());
 
 			webTestClient.post()
-					.uri(CONTROLLER_URL_ROOT_PREFIX +  UUID.randomUUID() + "/create-account-profile/")
+					.uri(CONTROLLER_URL_ROOT_PREFIX + "/create-account-profile/")
 					.body(BodyInserters.fromValue(SignupRequest.builder()
 							.email("ddd")
 							.firstName("dew")
@@ -120,7 +120,7 @@ public class SignupControllerReactiveTests {
 
 
 			String response = webTestClient.post()
-					.uri(CONTROLLER_URL_ROOT_PREFIX +  UUID.randomUUID() + "/create-account-profile/")
+					.uri(CONTROLLER_URL_ROOT_PREFIX + "/create-account-profile/")
 					.body(BodyInserters.fromValue(SignupRequest.builder()
 							.email("ddd")
 							.firstName("dew")

@@ -36,16 +36,16 @@ public class Controller {
         return  keycloakService.signup(keycloakSignupRequest);
     }
 
-    @PutMapping("{parentId}/create-profile/{profileId}")
+    @PutMapping("/create-profile/{profileId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<UserProfile> registerUser(@PathVariable UUID parentId, @PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
-        return profileService.createProfile(parentId, profileId.toString(), userProfile);
+    public Mono<UserProfile> registerUser(@PathVariable UUID profileId, @Valid @RequestBody UserProfile userProfile) {
+        return profileService.createProfile(profileId.toString(), userProfile);
     }
 
-    @PostMapping("{parentId}/create-account-profile")
+    @PostMapping("/create-account-profile")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<UserProfile>createAccountAndProfile(@PathVariable UUID parentId, @Valid @RequestBody SignupRequest signupRequest)  {
-        return  profileService.signUp(parentId, signupRequest);
+    public Mono<UserProfile>createAccountAndProfile(@Valid @RequestBody SignupRequest signupRequest)  {
+        return  profileService.signUp(signupRequest);
     }
 
     @PostMapping("/admin/therapists")
