@@ -73,7 +73,7 @@ public class SignupControllerReactiveTests {
 		UUID profileId = UUID.randomUUID();
 
 		webTestClient.put()
-				.uri(CONTROLLER_URL_ROOT_PREFIX +  UUID.randomUUID() + "/create-profile/" + profileId)
+				.uri(CONTROLLER_URL_ROOT_PREFIX +  "/create-profile/" + profileId)
 				.body(BodyInserters.fromValue(TestDataManager.generateUserProfile(profileId)))
 				.accept(MediaType.APPLICATION_JSON)
 				.exchange()
@@ -92,8 +92,12 @@ public class SignupControllerReactiveTests {
 					.thenReturn(UUID.randomUUID().toString());
 
 			webTestClient.post()
-					.uri(CONTROLLER_URL_ROOT_PREFIX +  UUID.randomUUID() + "/create-account-profile/")
-					.body(BodyInserters.fromValue(SignupRequest.builder().email("ddd").credentials(List.of(KeycloakCredentials.builder().build())).build()))
+					.uri(CONTROLLER_URL_ROOT_PREFIX + "/create-account-profile/")
+					.body(BodyInserters.fromValue(SignupRequest.builder()
+							.email("ddd")
+							.firstName("dew")
+							.lastName("sdc")
+							.credentials(List.of(KeycloakCredentials.builder().build())).build()))
 					.accept(MediaType.APPLICATION_JSON)
 					.exchange()
 					.expectStatus().isCreated();
@@ -116,8 +120,12 @@ public class SignupControllerReactiveTests {
 
 
 			String response = webTestClient.post()
-					.uri(CONTROLLER_URL_ROOT_PREFIX +  UUID.randomUUID() + "/create-account-profile/")
-					.body(BodyInserters.fromValue(SignupRequest.builder().email("ddd").credentials(List.of(KeycloakCredentials.builder().build())).build()))
+					.uri(CONTROLLER_URL_ROOT_PREFIX + "/create-account-profile/")
+					.body(BodyInserters.fromValue(SignupRequest.builder()
+							.email("ddd")
+							.firstName("dew")
+							.lastName("sdc")
+							.credentials(List.of(KeycloakCredentials.builder().build())).build()))
 					.accept(MediaType.APPLICATION_JSON)
 					.exchange()
 					.expectStatus().is4xxClientError()
@@ -128,5 +136,37 @@ public class SignupControllerReactiveTests {
 			assertThat(response).contains(locationResponse);
 		}
 	}
+
+
+	@Test
+	public void deleteProfileWithExceptionProfile() {
+		String locationResponse = UUID.randomUUID().toString();
+
+		Mockito.when(keycloakClient.getCliToken(any())).thenReturn(Mono.just(TestDataManager.generateAuthResponse()));
+		Mockito.when(profilesClient.deleteProfile(any())).thenReturn(Mono.error(new ProfilesException("BLLAA", locationResponse, HttpStatus.BAD_REQUEST)));
+
+//		check it's not involved
+		Mockito.when(keycloakClient.deleteAccount(any(), any())).thenThrow(new ProfilesException("NOPOO", "DFSSDCS", HttpStatus.OK));
+
+
+		try (MockedStatic<UriUtils> mockedLocation = Mockito.mockStatic(UriUtils.class)) {
+			mockedLocation
+					.when( ()-> UriUtils.getLocationId(any()))
+					.thenReturn(locationResponse);
+
+
+			String response = webTestClient.delete()
+					.uri(CONTROLLER_URL_ROOT_PREFIX + "/admin/clients/{accountId}", locationResponse)
+					.accept(MediaType.APPLICATION_JSON)
+					.exchange()
+					.expectStatus().isBadRequest()
+					.returnResult(String.class)
+					.getResponseBody()
+					.blockFirst();
+
+			assertThat(response).contains(locationResponse);
+		}
+	}
+
 
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -16,9 +17,11 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class SignupRequest {
-    @NotBlank
+    @NotBlank @NotEmpty
     private String email;
+    @NotBlank @NotEmpty
     private String firstName;
+    @NotBlank @NotEmpty
     private String lastName;
     private String mobileNumber;
     private String additionalDetails;

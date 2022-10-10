@@ -2,6 +2,7 @@ package com.agenatech.keycloakadminadapter.service.impl;
 
 import com.agenatech.keycloakadminadapter.client.ProfilesClient;
 import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
+import com.agenatech.keycloakadminadapter.exception.ProfilesException;
 import com.agenatech.keycloakadminadapter.model.payload.TherapistProfile;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -30,9 +32,9 @@ public class ProfileServiceImpl implements ProfileService {
 
 
     @Override
-    public Mono<UserProfile> signUp(UUID parentId, SignupRequest signupRequest) {
+    public Mono<UserProfile> signUp(SignupRequest signupRequest) {
         return registerUser(signupRequest)
-                .flatMap(userId -> createProfile(parentId, userId, signupRequestToProfile(signupRequest, UserProfile.class)));
+                .flatMap(userId -> createProfile(userId, signupRequestToProfile(signupRequest, UserProfile.class)));
     }
 
     @Override
@@ -43,7 +45,7 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Mono<UserProfile> createProfile(UUID parentId, String profileId, UserProfile userProfile) {
+    public Mono<UserProfile> createProfile(String profileId, UserProfile userProfile) {
         log.debug(" to create profile {}", profileId);
 //        userProfile.setParentId(parentId);
         return profilesClient.createProfile(profileId, userProfile);
@@ -54,17 +56,18 @@ public class ProfileServiceImpl implements ProfileService {
         return profilesClient.createTherapistProfile(profileId, profile);
     }
 
-//    todo error handling
     @Override
     public Mono<Void> deleteUser(UUID userId) {
         return profilesClient.deleteProfile(userId)
-                .then(keycloakService.deleteAccount(userId));
+                .onErrorMap(error -> new ProfilesException(error.getMessage(), userId.toString(), HttpStatus.BAD_REQUEST))
+                .doOnSuccess(x ->keycloakService.deleteAccount(userId));
     }
 
     @Override
     public Mono<Void> deleteTherapist(UUID userId) {
         return profilesClient.deleteTherapistProfile(userId)
-                .then(keycloakService.deleteAccount(userId));
+                .onErrorMap(error -> new ProfilesException(error.getMessage(), userId.toString(), HttpStatus.BAD_REQUEST))
+                .doOnSuccess(x ->keycloakService.deleteAccount(userId));
     }
 
 
