@@ -66,6 +66,12 @@ public class Controller {
         return profileService.deleteUser(accountId);
     }
 
+    @DeleteMapping("/accounts/{accountId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public Mono<Void> deleteMyAccount(@PathVariable UUID accountId){
+        return profileService.deleteUser(accountId);
+    }
+
     @DeleteMapping("/admin/therapists/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> deleteTherapist(@PathVariable UUID accountId){
