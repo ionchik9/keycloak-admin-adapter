@@ -15,6 +15,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -57,17 +58,18 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public Mono<Void> deleteUser(UUID userId) {
-        return profilesClient.deleteProfile(userId)
+    public Mono<ResponseEntity> deleteUser(UUID userId) {
+         return profilesClient.deleteProfile(userId)
                 .onErrorMap(error -> new ProfilesException(error.getMessage(), userId.toString(), HttpStatus.BAD_REQUEST))
                 .doOnSuccess(x ->keycloakService.deleteAccount(userId));
     }
 
     @Override
-    public Mono<Void> deleteTherapist(UUID userId) {
-        return profilesClient.deleteTherapistProfile(userId)
+    public void deleteTherapist(UUID userId) {
+         profilesClient.deleteTherapistProfile(userId)
                 .onErrorMap(error -> new ProfilesException(error.getMessage(), userId.toString(), HttpStatus.BAD_REQUEST))
-                .doOnSuccess(x ->keycloakService.deleteAccount(userId));
+                .doOnSuccess(x ->keycloakService.deleteAccount(userId))
+                .subscribe();
     }
 
 

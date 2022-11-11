@@ -12,6 +12,7 @@ import io.netty.handler.logging.LogLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -75,14 +76,14 @@ public class KeycloakClient {
                 .map(clientResponse -> clientResponse.getHeaders().getLocation());
     }
 
-    public Mono<Void> deleteAccount(UUID userId, String adminToken) {
+    public Mono<ResponseEntity> deleteAccount(UUID userId, String adminToken) {
         return webClient
                 .delete()
                 .uri(keycloakConfig.usersUri() + "/" + userId)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION_HEADER_NAME, adminToken)
                 .retrieve()
-                .bodyToMono(Void.class);
+                .bodyToMono(ResponseEntity.class);
     }
 
 

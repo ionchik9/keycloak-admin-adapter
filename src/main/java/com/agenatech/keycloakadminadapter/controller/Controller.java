@@ -10,6 +10,7 @@ import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import com.agenatech.keycloakadminadapter.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -62,19 +63,19 @@ public class Controller {
 
     @DeleteMapping("/admin/clients/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteUserAccount(@PathVariable UUID accountId){
+    public Mono<ResponseEntity> deleteUserAccount(@PathVariable UUID accountId){
         return profileService.deleteUser(accountId);
     }
 
     @DeleteMapping("/accounts/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteMyAccount(@PathVariable UUID accountId){
-        return profileService.deleteUser(accountId);
+    public void deleteMyAccount(@PathVariable UUID accountId){
+         profileService.deleteUser(accountId);
     }
 
     @DeleteMapping("/admin/therapists/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteTherapist(@PathVariable UUID accountId){
-        return profileService.deleteTherapist(accountId);
+    public void deleteTherapist(@PathVariable UUID accountId){
+        profileService.deleteTherapist(accountId);
     }
 }

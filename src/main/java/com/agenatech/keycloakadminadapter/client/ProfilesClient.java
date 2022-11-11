@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -71,14 +72,14 @@ public class ProfilesClient {
                 .bodyToMono(TherapistProfile.class);
     }
 
-    public Mono<Void> deleteProfile(UUID profileId){
+    public Mono<ResponseEntity> deleteProfile(UUID profileId){
         return webClient
                 .delete()
                 .uri(profilesConfig.path()+"/{profileId}", profileId)
                 .retrieve()
                 .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
                         .flatMap(error -> Mono.error(new ProfilesException(error.message(), profileId.toString(), response.statusCode()))))
-                .bodyToMono(Void.class);
+                .bodyToMono(ResponseEntity.class);
     }
 
     public Mono<Void> deleteTherapistProfile(UUID profileId){
