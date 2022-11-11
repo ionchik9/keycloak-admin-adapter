@@ -46,6 +46,7 @@ public class KeycloakServiceImpl implements KeycloakService {
 
     @Override
     public Mono<ResponseEntity> deleteAccount(UUID accountId) {
+        log.debug("it is caaaaled");
         return adminLogin()
                 .flatMap(authResponse -> keycloackClient.deleteAccount(accountId,  BEARER + authResponse.accessToken()));
     }
