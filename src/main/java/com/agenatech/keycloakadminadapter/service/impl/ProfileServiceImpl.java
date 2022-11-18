@@ -61,8 +61,9 @@ public class ProfileServiceImpl implements ProfileService {
     public Mono<ResponseEntity> deleteUser(UUID userId) {
         log.debug(" to delete user {}", userId);
          return profilesClient.deleteProfile(userId)
-                .onErrorMap(error -> new ProfilesException(error.getMessage(), userId.toString(), HttpStatus.BAD_REQUEST))
-                .doOnSuccess(x ->keycloakService.deleteAccount(userId));
+                 .flatMap(res -> keycloakService.deleteAccount(userId));
+//                .onErrorMap(error -> new ProfilesException(error.getMessage(), userId.toString(), HttpStatus.BAD_REQUEST))
+//                .doOnSuccess(x ->keycloakService.deleteAccount(userId));
     }
 
     @Override
