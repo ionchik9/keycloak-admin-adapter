@@ -1,5 +1,6 @@
 package com.agenatech.keycloakadminadapter.controller;
 
+import com.agenatech.keycloakadminadapter.exception.ProfilesException;
 import com.agenatech.keycloakadminadapter.model.payload.TherapistProfile;
 import com.agenatech.keycloakadminadapter.model.payload.UserAccount;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
@@ -72,12 +73,26 @@ public class Controller {
     @DeleteMapping("/accounts/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Mono<Void> deleteMyAccount(@PathVariable UUID accountId){
-         return profileService.deleteUser(accountId);
+        return profileService.deleteUser(accountId);
     }
 
     @DeleteMapping("/admin/therapists/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTherapist(@PathVariable UUID accountId){
         profileService.deleteTherapist(accountId);
+    }
+
+
+    @GetMapping
+    public void test() {
+        log.debug(" oke la");
+        logg("primero")
+                .onErrorMap(error -> new ProfilesException("error.getMessage()", "userId.toString()", HttpStatus.BAD_REQUEST))
+                .doOnSuccess(x ->logg("diablo")).subscribe();
+    }
+
+    private Mono<Void> logg(String s){
+         log.debug(s);
+        return Mono.empty();
     }
 }
