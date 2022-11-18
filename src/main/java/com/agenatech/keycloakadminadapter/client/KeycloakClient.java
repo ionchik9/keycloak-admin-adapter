@@ -2,6 +2,8 @@ package com.agenatech.keycloakadminadapter.client;
 
 
 import com.agenatech.keycloakadminadapter.config.KeycloakConfig;
+import com.agenatech.keycloakadminadapter.exception.ErrorDto;
+import com.agenatech.keycloakadminadapter.exception.ProfilesException;
 import com.agenatech.keycloakadminadapter.model.payload.UserAccount;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakAdminTokenRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
@@ -9,8 +11,10 @@ import com.agenatech.keycloakadminadapter.model.payload.response.AuthResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.handler.logging.LogLevel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -30,6 +34,7 @@ import java.util.UUID;
 
 
 @Service
+@Slf4j
 public class KeycloakClient {
     private WebClient webClient;
 
@@ -77,12 +82,15 @@ public class KeycloakClient {
     }
 
     public Mono<ResponseEntity> deleteAccount(UUID userId, String adminToken) {
+        log.debug("delete account called, id = {}", userId);
         return webClient
                 .delete()
                 .uri(keycloakConfig.usersUri() + "/" + userId)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .header(AUTHORIZATION_HEADER_NAME, adminToken)
                 .retrieve()
+                .onStatus(HttpStatus::isError, response -> response.bodyToMono(ErrorDto.class)
+                        .flatMap(error -> Mono.error(new ProfilesException(error.message(), userId.toString(), response.statusCode()))))
                 .bodyToMono(ResponseEntity.class);
     }
 
