@@ -62,7 +62,7 @@ public class ProfileServiceImpl implements ProfileService {
         log.debug(" to delete user {}", userId);
           profilesClient.deleteProfile(userId).then()
                 .onErrorMap(error -> new ProfilesException(error.getMessage(), userId.toString(), HttpStatus.BAD_REQUEST))
-                .doOnSuccess(x ->keycloakService.deleteAccount(userId)).subscribe();
+                .doOnSuccess(x ->keycloakService.deleteAccount(userId).subscribe());
         return Mono.empty();
     }
 
