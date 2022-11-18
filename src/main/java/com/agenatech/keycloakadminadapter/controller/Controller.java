@@ -88,7 +88,7 @@ public class Controller {
         log.debug(" oke la");
         logg("primero")
                 .onErrorMap(error -> new ProfilesException("error.getMessage()", "userId.toString()", HttpStatus.BAD_REQUEST))
-                .doOnSuccess(x ->logg("diablo")).subscribe();
+                .doOnSuccess(x ->logg("diablo").subscribe()).subscribe();
     }
 
     private Mono<Void> logg(String s){
