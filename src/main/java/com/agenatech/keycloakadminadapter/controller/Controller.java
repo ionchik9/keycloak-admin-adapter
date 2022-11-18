@@ -65,16 +65,14 @@ public class Controller {
 
     @DeleteMapping("/admin/clients/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<ResponseEntity> deleteUserAccount(@PathVariable UUID accountId){
-        var res = profileService.deleteUser(accountId);
-        log.debug(" deleting res {}", res);
-        return res;
+    public Mono<Void> deleteUserAccount(@PathVariable UUID accountId){
+        return profileService.deleteUser(accountId);
     }
 
     @DeleteMapping("/accounts/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteMyAccount(@PathVariable UUID accountId){
-         profileService.deleteUser(accountId);
+    public Mono<Void> deleteMyAccount(@PathVariable UUID accountId){
+         return profileService.deleteUser(accountId);
     }
 
     @DeleteMapping("/admin/therapists/{accountId}")
