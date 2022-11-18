@@ -4,7 +4,6 @@ import com.agenatech.keycloakadminadapter.model.payload.TherapistProfile;
 import com.agenatech.keycloakadminadapter.model.payload.UserProfile;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupRequest;
 import com.agenatech.keycloakadminadapter.model.payload.request.SignupTherapistRequest;
-import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
