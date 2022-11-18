@@ -13,6 +13,6 @@ public interface ProfileService {
     Mono<TherapistProfile> createTherapist(SignupTherapistRequest signupRequest);
     Mono<UserProfile> createProfile(String profileId, UserProfile userProfile);
     Mono<TherapistProfile> createTherapistProfile(String profileId, TherapistProfile profile);
-    Mono<Void> deleteUser(UUID userId);
-    Mono<Void> deleteTherapist(UUID userId);
+    void deleteUser(UUID userId);
+    void deleteTherapist(UUID userId);
 }
