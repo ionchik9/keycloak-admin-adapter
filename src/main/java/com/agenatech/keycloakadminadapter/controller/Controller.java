@@ -8,6 +8,7 @@ import com.agenatech.keycloakadminadapter.model.payload.request.SignupTherapistR
 import com.agenatech.keycloakadminadapter.model.payload.request.keycloak.KeycloakSignupRequest;
 import com.agenatech.keycloakadminadapter.service.KeycloakService;
 import com.agenatech.keycloakadminadapter.service.ProfileService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1/sso")
+@Slf4j
 public class Controller {
     private final ProfileService profileService;
     private final KeycloakService keycloakService;
@@ -62,13 +64,20 @@ public class Controller {
 
     @DeleteMapping("/admin/clients/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteUserAccount(@PathVariable UUID accountId){
-        return profileService.deleteUser(accountId);
+    public void deleteUserAccount(@PathVariable UUID accountId){
+        profileService.deleteUser(accountId);
+    }
+
+    @DeleteMapping("/accounts/{accountId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteMyAccount(@PathVariable UUID accountId){
+        profileService.deleteUser(accountId);
     }
 
     @DeleteMapping("/admin/therapists/{accountId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public Mono<Void> deleteTherapist(@PathVariable UUID accountId){
-        return profileService.deleteTherapist(accountId);
+    public void deleteTherapist(@PathVariable UUID accountId){
+        profileService.deleteTherapist(accountId);
     }
+
 }

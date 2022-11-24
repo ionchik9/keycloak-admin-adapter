@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -44,7 +45,8 @@ public class KeycloakServiceImpl implements KeycloakService {
     }
 
     @Override
-    public Mono<Void> deleteAccount(UUID accountId) {
+    public Mono<ResponseEntity> deleteAccount(UUID accountId) {
+        log.debug("it is caaaaled");
         return adminLogin()
                 .flatMap(authResponse -> keycloackClient.deleteAccount(accountId,  BEARER + authResponse.accessToken()));
     }
